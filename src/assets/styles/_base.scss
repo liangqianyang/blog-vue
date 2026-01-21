@@ -1,0 +1,259 @@
+@use 'variables' as *;
+@use 'mixins' as *;
+
+// ==========================================
+// CSS Reset & Base Styles
+// ==========================================
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: $font-family;
+  font-size: $font-size-base;
+  color: $text-primary;
+  background: $page-bg;
+  line-height: $line-height-base;
+  overflow-x: hidden;
+}
+
+// ==========================================
+// 基础元素样式
+// ==========================================
+
+img {
+  border: 0;
+  display: block;
+  max-width: 100%;
+}
+
+ul, li {
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+  color: $text-primary;
+  transition: $transition-base;
+  
+  &:hover {
+    color: #000;
+  }
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: normal;
+}
+
+input, button, textarea {
+  font-family: inherit;
+  font-size: inherit;
+  outline: none;
+  border: none;
+}
+
+button {
+  cursor: pointer;
+  background: none;
+}
+
+// ==========================================
+// 工具类
+// ==========================================
+
+.clearfix {
+  @include clearfix;
+}
+
+.clear {
+  clear: both;
+  width: 100%;
+  overflow: hidden;
+  height: $spacing-lg;
+}
+
+.fl {
+  float: left !important;
+}
+
+.fr {
+  float: right !important;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.mt-10 {
+  margin-top: $spacing-sm;
+}
+
+.mt-20 {
+  margin-top: $spacing-lg;
+}
+
+.mb-10 {
+  margin-bottom: $spacing-sm;
+}
+
+.mb-20 {
+  margin-bottom: $spacing-lg;
+}
+
+// ==========================================
+// 容器
+// ==========================================
+
+.container {
+  width: $container-width;
+  margin: 0 auto;
+  overflow: hidden;
+  
+  @include respond-to('xl') {
+    width: 100%;
+    padding: 0 $spacing-md;
+  }
+}
+
+// ==========================================
+// 白色卡片背景
+// ==========================================
+
+.white-bg {
+  @include card;
+}
+
+// ==========================================
+// 图片缩放效果
+// ==========================================
+
+.img-scale {
+  @include img-scale;
+}
+
+// ==========================================
+// 主要布局
+// ==========================================
+
+.main-layout {
+  @include clearfix;
+  width: $container-width;
+  margin: 0 auto;
+  padding-top: $spacing-lg;
+  
+  @include respond-to('xl') {
+    width: 100%;
+    padding: $spacing-md;
+  }
+}
+
+.main-content {
+  width: $main-width;
+  float: left;
+  
+  @include respond-to('lg') {
+    width: 100%;
+    float: none;
+  }
+}
+
+.sidebar {
+  width: $sidebar-width;
+  float: right;
+  
+  @include respond-to('lg') {
+    width: 100%;
+    float: none;
+    margin-top: $spacing-lg;
+  }
+}
+
+// ==========================================
+// 标题栏
+// ==========================================
+
+.section-title {
+  @include section-title;
+}
+
+// ==========================================
+// 颜色类
+// ==========================================
+
+.text-primary {
+  color: $primary;
+}
+
+.text-success {
+  color: $success;
+}
+
+.text-danger {
+  color: $danger;
+}
+
+.text-warning {
+  color: $warning;
+}
+
+.text-muted {
+  color: $text-muted;
+}
+
+// ==========================================
+// 按钮
+// ==========================================
+
+.btn-primary {
+  @include btn-primary;
+}
+
+.btn-dark {
+  @include btn-dark;
+}
+
+// ==========================================
+// 链接样式
+// ==========================================
+
+.link-primary {
+  color: $success;
+  
+  &:hover {
+    text-decoration: underline;
+    color: #000;
+  }
+}
+
+// ==========================================
+// 响应式隐藏
+// ==========================================
+
+.hidden-mobile {
+  @include respond-to('md') {
+    display: none !important;
+  }
+}
+
+.hidden-desktop {
+  display: none !important;
+  
+  @include respond-to('md') {
+    display: block !important;
+  }
+}

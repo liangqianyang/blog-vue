@@ -1,0 +1,277 @@
+@use 'sass:math';
+@use 'sass:color';
+@use 'variables' as *;
+
+// ==========================================
+// 文本截断
+// ==========================================
+
+// 单行文本截断
+@mixin text-ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+// 多行文本截断
+@mixin text-clamp($lines: 2) {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: $lines;
+}
+
+// ==========================================
+// Flexbox 布局
+// ==========================================
+
+@mixin flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin flex-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+@mixin flex-start {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+@mixin flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+// ==========================================
+// 响应式媒体查询
+// ==========================================
+
+@mixin respond-to($breakpoint) {
+  @if $breakpoint == 'xs' {
+    @media (max-width: $breakpoint-xs) { @content; }
+  } @else if $breakpoint == 'sm' {
+    @media (max-width: $breakpoint-sm) { @content; }
+  } @else if $breakpoint == 'md' {
+    @media (max-width: $breakpoint-md) { @content; }
+  } @else if $breakpoint == 'lg' {
+    @media (max-width: $breakpoint-lg) { @content; }
+  } @else if $breakpoint == 'xl' {
+    @media (max-width: $breakpoint-xl) { @content; }
+  }
+}
+
+@mixin respond-above($breakpoint) {
+  @if $breakpoint == 'xs' {
+    @media (min-width: $breakpoint-xs + 1) { @content; }
+  } @else if $breakpoint == 'sm' {
+    @media (min-width: $breakpoint-sm + 1) { @content; }
+  } @else if $breakpoint == 'md' {
+    @media (min-width: $breakpoint-md + 1) { @content; }
+  } @else if $breakpoint == 'lg' {
+    @media (min-width: $breakpoint-lg + 1) { @content; }
+  } @else if $breakpoint == 'xl' {
+    @media (min-width: $breakpoint-xl + 1) { @content; }
+  }
+}
+
+// ==========================================
+// 卡片样式
+// ==========================================
+
+@mixin card {
+  background: $white-bg;
+  border-radius: $radius-sm;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-lg;
+  overflow: hidden;
+}
+
+@mixin card-hover {
+  transition: $transition-base;
+  
+  &:hover {
+    box-shadow: $shadow-card;
+  }
+}
+
+// ==========================================
+// 图片缩放效果
+// ==========================================
+
+@mixin img-scale($scale: 1.1) {
+  overflow: hidden;
+  
+  img {
+    width: 100%;
+    transition: $transition-slow;
+  }
+  
+  &:hover img {
+    transform: scale($scale);
+  }
+}
+
+// ==========================================
+// 标题样式
+// ==========================================
+
+@mixin section-title {
+  font-size: $font-size-md;
+  line-height: 40px;
+  border-bottom: 1px solid $border-color;
+  color: #484848;
+  font-weight: normal;
+  position: relative;
+  margin-bottom: $spacing-sm;
+  
+  &::after {
+    content: "";
+    position: absolute;
+    width: 60px;
+    height: 2px;
+    background: #000;
+    left: 0;
+    bottom: 0;
+    transition: $transition-slow;
+  }
+  
+  &:hover::after {
+    width: 80px;
+  }
+}
+
+// ==========================================
+// 按钮样式
+// ==========================================
+
+@mixin btn-base {
+  display: inline-block;
+  padding: 5px 15px;
+  border-radius: $radius-sm;
+  cursor: pointer;
+  transition: $transition-base;
+  text-align: center;
+  text-decoration: none;
+}
+
+@mixin btn-primary {
+  @include btn-base;
+  background: $primary;
+  color: $text-white;
+  
+  &:hover {
+    background: $primary-dark;
+    color: $text-white;
+  }
+}
+
+@mixin btn-dark {
+  @include btn-base;
+  background: $dark-bg;
+  color: $text-white;
+  
+  &:hover {
+    background: color.adjust($dark-bg, $lightness: 10%);
+    color: $text-white;
+  }
+}
+
+// ==========================================
+// 清除浮动
+// ==========================================
+
+@mixin clearfix {
+  &::after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+}
+
+// ==========================================
+// 绝对定位居中
+// ==========================================
+
+@mixin absolute-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+@mixin absolute-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+// ==========================================
+// 头像样式
+// ==========================================
+
+@mixin avatar($size: 30px) {
+  position: relative;
+  width: $size;
+  height: $size;
+  border-radius: $radius-full;
+  padding: 2px;
+  display: block;
+  background: $gradient-avatar;
+  
+  img {
+    width: 100%;
+    height: 100%;
+    border-radius: $radius-full;
+  }
+}
+
+// ==========================================
+// 列表项圆点
+// ==========================================
+
+@mixin list-dot($color: #000, $size: 3px) {
+  position: relative;
+  padding-left: 15px;
+  
+  &::before {
+    content: "";
+    position: absolute;
+    width: $size;
+    height: $size;
+    background: $color;
+    border-radius: $radius-full;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+}
+
+// ==========================================
+// 过渡动画
+// ==========================================
+
+@mixin transition($property: all, $duration: 0.3s, $timing: ease) {
+  transition: $property $duration $timing;
+}
+
+// ==========================================
+// 隐藏滚动条但保持滚动功能
+// ==========================================
+
+@mixin hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}

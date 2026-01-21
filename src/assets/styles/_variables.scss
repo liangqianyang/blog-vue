@@ -1,0 +1,110 @@
+// ==========================================
+// 颜色变量
+// ==========================================
+
+// 主色调
+$primary: #00c1de;
+$primary-dark: #00a5bd;
+$primary-light: #12b7de;
+
+// 背景色
+$dark-bg: #1c2327;
+$page-bg: #e9eaed;
+$white-bg: #ffffff;
+$light-bg: #f6f6f6;
+$hover-bg: #f7f7f7;
+
+// 文字颜色
+$text-primary: #333333;
+$text-secondary: #666666;
+$text-muted: #999999;
+$text-white: #ffffff;
+$text-light: #73777a;
+
+// 边框颜色
+$border-color: #eeeeee;
+$border-light: #e4e3e3;
+
+// 功能色
+$success: #096;
+$danger: #ff0000;
+$warning: #ff6600;
+$info: #337ab7;
+
+// 渐变色
+$gradient-avatar: linear-gradient(to top right, rgba(0, 153, 255, 0.9), rgba(42, 228, 197, 0.7));
+$gradient-header: linear-gradient(to left, #4cd964, #5ac8fa, #007aff, #34aadc, #5856d6, #ff2d55);
+
+// ==========================================
+// 尺寸变量
+// ==========================================
+
+// 容器宽度
+$container-width: 1200px;
+
+// 间距
+$spacing-xs: 5px;
+$spacing-sm: 10px;
+$spacing-md: 15px;
+$spacing-lg: 20px;
+$spacing-xl: 30px;
+
+// 圆角
+$radius-sm: 3px;
+$radius-md: 5px;
+$radius-lg: 10px;
+$radius-full: 50%;
+
+// 导航栏高度
+$header-height: 60px;
+
+// 侧边栏宽度
+$sidebar-width: 23.5%;
+$main-width: 75%;
+
+// ==========================================
+// 响应式断点
+// ==========================================
+$breakpoint-xs: 480px;
+$breakpoint-sm: 640px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 992px;
+$breakpoint-xl: 1200px;
+
+// ==========================================
+// 字体
+// ==========================================
+$font-family: "Microsoft YaHei", Arial, Helvetica, sans-serif;
+$font-size-xs: 12px;
+$font-size-sm: 14px;
+$font-size-base: 15px;
+$font-size-md: 16px;
+$font-size-lg: 18px;
+$font-size-xl: 22px;
+
+// 行高
+$line-height-base: 1.5;
+$line-height-lg: 1.8;
+
+// ==========================================
+// 阴影
+// ==========================================
+$shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+$shadow-md: 0 4px 10px -4px rgba(48, 63, 107, 0.2);
+$shadow-lg: 0 0 10px #ccc;
+$shadow-card: 1px 1px 8px #ccc;
+
+// ==========================================
+// 过渡动画
+// ==========================================
+$transition-base: all 0.3s ease;
+$transition-fast: all 0.15s ease;
+$transition-slow: all 0.5s ease;
+
+// ==========================================
+// Z-index 层级
+// ==========================================
+$z-dropdown: 100;
+$z-fixed: 1000;
+$z-modal: 2000;
+$z-tooltip: 3000;

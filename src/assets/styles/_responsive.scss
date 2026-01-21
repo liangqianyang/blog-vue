@@ -1,0 +1,200 @@
+@use 'variables' as *;
+@use 'mixins' as *;
+
+// ==========================================
+// 响应式布局增强
+// ==========================================
+
+// 大屏幕 (< 1200px)
+@include respond-to('xl') {
+  .container,
+  .main-layout {
+    width: 100%;
+    padding: 0 $spacing-md;
+  }
+}
+
+// 平板 (< 992px)
+@include respond-to('lg') {
+  .main-content,
+  .sidebar-wrapper {
+    width: 100%;
+    float: none;
+  }
+  
+  .sidebar-wrapper {
+    margin-top: $spacing-lg;
+  }
+}
+
+// 平板竖屏 (< 768px)
+@include respond-to('md') {
+  // 导航栏响应式
+  .nav-box {
+    padding: 0 $spacing-sm;
+  }
+  
+  .logo {
+    font-size: $font-size-lg;
+  }
+  
+  // 隐藏桌面端导航，显示移动端菜单
+  .hidden-mobile {
+    display: none !important;
+  }
+  
+  .hidden-desktop {
+    display: block !important;
+  }
+  
+  // 两栏布局变单栏
+  .top-section {
+    flex-direction: column;
+    
+    .banner-box,
+    .headline-box {
+      width: 100%;
+    }
+  }
+  
+  // 文章列表图片
+  .blog-pic {
+    width: 35%;
+  }
+  
+  // 专题网格
+  .topic-grid li {
+    width: calc(50% - #{$spacing-lg});
+  }
+  
+  // 页脚
+  .footer-content {
+    text-align: center;
+    
+    .wx-box {
+      float: none;
+      margin-bottom: $spacing-lg;
+      
+      ul {
+        justify-content: center;
+      }
+    }
+  }
+}
+
+// 手机 (< 640px)
+@include respond-to('sm') {
+  body {
+    font-size: $font-size-sm;
+  }
+  
+  // 卡片内边距减小
+  .white-bg {
+    padding: $spacing-md;
+  }
+  
+  // 文章列表图片
+  .blog-pic {
+    width: 100%;
+    float: none;
+    margin-right: 0;
+    margin-bottom: $spacing-sm;
+  }
+  
+  // 专题网格
+  .topic-grid li {
+    width: 100%;
+  }
+  
+  // 多图模式
+  .image-list a img {
+    height: 80px;
+  }
+  
+  // 分页
+  .pagination {
+    a, b {
+      padding: 4px 8px;
+      font-size: $font-size-xs;
+    }
+  }
+  
+  // 标题
+  .section-title {
+    font-size: $font-size-base;
+  }
+  
+  // 关于页
+  .experience-list li,
+  .blog-info-list li {
+    width: 100%;
+  }
+  
+  .contact-list li {
+    width: 100%;
+  }
+  
+  // 导航页
+  .site-grid li {
+    width: 50%;
+  }
+  
+  // 时间轴
+  .timeline {
+    padding-left: 80px;
+    
+    &::before {
+      left: 70px;
+    }
+  }
+  
+  .timeline-date span {
+    left: -80px;
+    font-size: $font-size-sm;
+  }
+}
+
+// 超小屏 (< 480px)
+@include respond-to('xs') {
+  // 隐藏一些次要元素
+  .nav-links {
+    display: none;
+  }
+  
+  // 减小间距
+  .main-layout {
+    padding: $spacing-sm;
+  }
+  
+  // 友情链接单列
+  .links li {
+    width: 100%;
+  }
+  
+  // 博客信息单列
+  .blog-info-list li {
+    width: 100%;
+  }
+}
+
+// ==========================================
+// 打印样式
+// ==========================================
+@media print {
+  header,
+  footer,
+  .sidebar-wrapper,
+  .back-to-top,
+  .search-box {
+    display: none !important;
+  }
+  
+  .main-content {
+    width: 100% !important;
+    float: none !important;
+  }
+  
+  .article-wrapper {
+    box-shadow: none !important;
+  }
+}
