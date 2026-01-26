@@ -29,6 +29,34 @@ if (import.meta.env.DEV) {
   })
 }
 
+// API 响应数据到前端 Article 类型的映射函数
+function mapArticleFromApi(item: {
+  id: number
+  title: string
+  summary: string
+  content?: string
+  thumbnail?: string
+  category?: { id: number; name: string }
+  labels?: { id: number; title: string }[]
+  published_at?: string
+  created_at?: string
+  is_top?: boolean
+  view_count?: number
+}): Article {
+  return {
+    id: item.id,
+    title: item.title,
+    summary: item.summary,
+    content: item.content,
+    cover: item.thumbnail,  // thumbnail -> cover
+    category: item.category || { id: 0, name: '' },
+    author: { name: '', avatar: '' },
+    createTime: item.published_at || item.created_at || '',
+    isTop: item.is_top,
+    viewCount: item.view_count
+  }
+}
+
 // 文章相关 API
 export const articleApi = {
   // 获取文章列表
@@ -68,6 +96,19 @@ export const articleApi = {
       return mockData.getRecommendArticles(limit)
     }
     const { data } = await api.get('/articles/recommend', { params: { limit } })
+    return data
+  },
+
+  // 获取头条文章（按浏览量排序）
+  async getTopRanked(params: { limit?: number, order_by?: string } = {}): Promise<Article[]> {
+    if (USE_MOCK) {
+      return mockData.getArticles({ pageSize: params.limit || 2 }).list
+    }
+    const { data } = await api.get('/articles/public/top-ranked', { params })
+    // 处理响应格式，转换字段名
+    if (data.code === 0 && Array.isArray(data.data)) {
+      return data.data.map(mapArticleFromApi)
+    }
     return data
   }
 }

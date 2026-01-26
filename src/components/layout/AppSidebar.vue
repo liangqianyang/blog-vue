@@ -32,10 +32,10 @@ onMounted(async () => {
     <!-- 名片 -->
     <div class="card">
       <h2>我的名片</h2>
-      <p>网名：DanceSmile | 即步非烟</p>
-      <p>职业：Web前端设计师、网页设计</p>
-      <p>现居：四川省-成都市</p>
-      <p>Email：dancesmiling@qq.com</p>
+      <p>网名：LeoLiang | 枫叶</p>
+      <p>职业：PHP工程师</p>
+      <p>现居：安徽省-合肥市</p>
+      <p>Email：liangqy@proton.me</p>
      
     </div>
 

@@ -11,7 +11,7 @@ defineProps<Props>()
 <template>
   <div class="headline">
     <ul>
-      <li v-for="article in articles.slice(0, 2)" :key="article.id">
+      <li v-for="article in articles" :key="article.id">
         <router-link :to="`/article/${article.id}`" :title="article.title">
           <img :src="article.cover" :alt="article.title">
           <span>{{ article.title }}</span>

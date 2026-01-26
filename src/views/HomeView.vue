@@ -11,6 +11,7 @@ import TopicList from '@/components/home/TopicList.vue'
 import BlogList from '@/components/home/BlogList.vue'
 
 const banners = ref<BannerType[]>([])
+const headlines = ref<Article[]>([])
 const articles = ref<Article[]>([])
 const loading = ref(true)
 
@@ -21,6 +22,16 @@ onMounted(async () => {
     banners.value = bannerData
   } catch (error) {
     console.error('Failed to load banner data:', error)
+  }
+
+  try {
+    const headlineData = await articleApi.getTopRanked({ 
+      limit: 2, 
+      order_by: 'view_count' 
+    })
+    headlines.value = headlineData
+  } catch (error) {
+    console.error('Failed to load headline data:', error)
   }
   
   try {
@@ -44,7 +55,7 @@ onMounted(async () => {
           <Banner :banners="banners" />
         </div>
         <div class="headline-box">
-          <Headline :articles="articles" />
+          <Headline :articles="headlines" />
         </div>
       </div>
       
