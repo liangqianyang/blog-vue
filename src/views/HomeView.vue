@@ -12,7 +12,6 @@ import BlogList from '@/components/home/BlogList.vue'
 
 const banners = ref<BannerType[]>([])
 const headlines = ref<Article[]>([])
-const articles = ref<Article[]>([])
 const loading = ref(true)
 
 onMounted(async () => {
@@ -32,13 +31,6 @@ onMounted(async () => {
     headlines.value = headlineData
   } catch (error) {
     console.error('Failed to load headline data:', error)
-  }
-  
-  try {
-    const articleData = await articleApi.getList({ page: 1, pageSize: 10 })
-    articles.value = articleData.list
-  } catch (error) {
-    console.error('Failed to load article data:', error)
   }
   
   loading.value = false
@@ -63,7 +55,7 @@ onMounted(async () => {
       <NewsTabs />
       
       <!-- 精彩专题 -->
-      <TopicList :articles="articles" />
+      <TopicList />
       
       <!-- 广告位 -->
       <div class="ad white-bg">
@@ -71,7 +63,7 @@ onMounted(async () => {
       </div>
       
       <!-- 最新博文 -->
-      <BlogList :articles="articles" />
+      <BlogList />
     </div>
     
     <!-- 右侧边栏 -->

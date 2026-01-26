@@ -72,13 +72,70 @@ export const articleApi = {
     return data
   },
 
+  // 获取公开文章列表（已发布且发布时间已到）
+  async getPublicList(params?: {
+    page?: number
+    per_page?: number
+    category_id?: number
+    label_id?: number
+  }): Promise<{ list: Article[], total: number, page: number, lastPage: number }> {
+    if (USE_MOCK) {
+      const result = mockData.getArticles({ page: params?.page, pageSize: params?.per_page })
+      return { list: result.list, total: result.total, page: result.page, lastPage: Math.ceil(result.total / (params?.per_page || 15)) }
+    }
+    const { data } = await api.get('/articles/public/list', { params })
+    if (data.code === 0 && data.data) {
+      const articles = data.data.data.map((item: {
+        id: number
+        title: string
+        summary: string
+        content?: string
+        thumbnail?: string
+        category?: { id: number; name: string }
+        labels?: { id: number; title: string }[]
+        published_at?: string
+        created_at?: string
+        is_top?: boolean
+        view_count?: number
+      }) => mapArticleFromApi(item))
+      return {
+        list: articles,
+        total: data.data.meta.total,
+        page: data.data.meta.current_page,
+        lastPage: data.data.meta.last_page
+      }
+    }
+    return { list: [], total: 0, page: 1, lastPage: 1 }
+  },
+
   // 获取文章详情
   async getDetail(id: number): Promise<Article> {
     if (USE_MOCK) {
       return mockData.getArticleById(id)
     }
-    const { data } = await api.get(`/articles/${id}`)
-    return data
+    const { data } = await api.get(`/articles/public/${id}`)
+    if (data.code === 0 && data.data) {
+      const item = data.data
+      return {
+        id: item.id,
+        title: item.title,
+        summary: item.summary,
+        content: item.content,
+        cover: item.thumbnail,
+        category: item.category || { id: 0, name: '' },
+        author: { name: '', avatar: '' },
+        createTime: item.published_at || item.created_at || '',
+        isTop: item.is_top,
+        viewCount: item.view_count,
+        likeCount: item.like_count,
+        commentCount: item.comment_count,
+        labels: item.labels?.map((label: { id: number; title: string }) => ({
+          id: label.id,
+          name: label.title
+        }))
+      }
+    }
+    throw new Error('文章不存在')
   },
 
   // 获取热门文章
@@ -100,7 +157,7 @@ export const articleApi = {
   },
 
   // 获取头条文章（按浏览量排序）
-  async getTopRanked(params: { limit?: number, order_by?: string } = {}): Promise<Article[]> {
+  async getTopRanked(params: { limit?: number, order_by?: string, category_id?: number, label_id?: number } = {}): Promise<Article[]> {
     if (USE_MOCK) {
       return mockData.getArticles({ pageSize: params.limit || 2 }).list
     }
@@ -110,6 +167,24 @@ export const articleApi = {
       return data.data.map(mapArticleFromApi)
     }
     return data
+  },
+
+  // 点赞文章
+  async like(id: number): Promise<{ likeCount: number }> {
+    const { data } = await api.post(`/articles/public/${id}/like`)
+    if (data.code === 0) {
+      return { likeCount: data.data?.like_count || 0 }
+    }
+    throw new Error(data.message || '点赞失败')
+  },
+
+  // 取消点赞文章
+  async unlike(id: number): Promise<{ likeCount: number }> {
+    const { data } = await api.post(`/articles/public/${id}/unlike`)
+    if (data.code === 0) {
+      return { likeCount: data.data?.like_count || 0 }
+    }
+    throw new Error(data.message || '取消点赞失败')
   }
 }
 
@@ -146,6 +221,29 @@ export const categoryApi = {
     }
     const { data } = await api.get('/categories')
     return data
+  },
+
+  // 获取前端展示的文章分类列表
+  async getArticleCategoriesList(): Promise<Category[]> {
+    if (USE_MOCK) {
+      return mockData.getCategories()
+    }
+    const { data } = await api.get('/article-categories/public/list')
+    if (data.code === 0 && Array.isArray(data.data)) {
+      return data.data.map((item: {
+        id: number
+        name: string
+        description?: string
+        cover_image?: string
+        pid?: number
+        sort?: number
+      }) => ({
+        id: item.id,
+        name: item.name,
+        slug: item.description
+      }))
+    }
+    return []
   }
 }
 
@@ -157,6 +255,27 @@ export const tagApi = {
     }
     const { data } = await api.get('/tags')
     return data
+  },
+
+  // 获取特别推荐标签列表
+  async getSpecialList(): Promise<Tag[]> {
+    if (USE_MOCK) {
+      return mockData.getTags()
+    }
+    const { data } = await api.get('/labels/public/special')
+    if (data.code === 0 && Array.isArray(data.data)) {
+      return data.data.map((item: {
+        id: number
+        title: string
+        is_special?: string
+        created_at?: string
+        updated_at?: string
+      }) => ({
+        id: item.id,
+        name: item.title
+      }))
+    }
+    return []
   }
 }
 

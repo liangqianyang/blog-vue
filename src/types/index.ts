@@ -24,6 +24,9 @@ export interface Article {
   createTime: string
   isTop?: boolean
   viewCount?: number
+  likeCount?: number
+  commentCount?: number
+  labels?: Tag[]
 }
 
 // 轮播图

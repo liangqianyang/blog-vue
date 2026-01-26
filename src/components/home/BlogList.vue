@@ -1,13 +1,29 @@
 <script setup lang="ts">
+import { ref, onMounted } from 'vue'
 import type { Article } from '@/types'
+import { articleApi } from '@/api'
 
 interface Props {
-  articles: Article[]
   showTitle?: boolean
 }
 
 withDefaults(defineProps<Props>(), {
   showTitle: true
+})
+
+const articles = ref<Article[]>([])
+const loading = ref(false)
+
+onMounted(async () => {
+  loading.value = true
+  try {
+    const result = await articleApi.getPublicList({ page: 1, per_page: 15 })
+    articles.value = result.list
+  } catch (error) {
+    console.error('加载文章列表失败:', error)
+  } finally {
+    loading.value = false
+  }
 })
 </script>
 
@@ -54,9 +70,8 @@ withDefaults(defineProps<Props>(), {
         <!-- 文章信息 -->
         <p class="blog-info">
           <i class="avatar">
-            <img :src="article.author.avatar" :alt="article.author.name">
+            <img src="http://oss.lqy-comic.com/attachments/20260126_IhNbsOYBzBbZJxj7.jpg" alt="头像">
           </i>
-          <span>{{ article.author.name }}</span>
           <span>{{ article.createTime }}</span>
           <span>【<router-link :to="`/list/${article.category.slug}`">{{ article.category.name }}</router-link>】</span>
         </p>

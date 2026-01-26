@@ -1,28 +1,60 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import type { Article, Category } from '@/types'
-import { mockData } from '@/api/mock'
+import { categoryApi, articleApi } from '@/api'
 
-const tabs = ref<Category[]>([
-  { id: 1, name: '个人博客' },
-  { id: 2, name: '工作日记' },
-  { id: 3, name: '心路历程' },
-  { id: 4, name: '我的博客' },
-  { id: 5, name: '前端技术' }
-])
-
-const activeTab = ref(1)
+const tabs = ref<Category[]>([])
+const activeTab = ref<number | null>(null)
 const articlesByCategory = ref<Record<number, Article[]>>({})
+const loading = ref(false)
 
 const changeTab = (categoryId: number) => {
   activeTab.value = categoryId
 }
 
-onMounted(() => {
-  // 加载各分类的文章
-  tabs.value.forEach(tab => {
-    articlesByCategory.value[tab.id] = mockData.getArticlesByCategory(tab.id)
-  })
+// 加载分类下的文章
+const loadCategoryArticles = async (categoryId: number) => {
+  if (articlesByCategory.value[categoryId]) {
+    return // 已加载过
+  }
+  loading.value = true
+  try {
+    const articles = await articleApi.getTopRanked({ 
+      limit: 2, 
+      category_id: categoryId 
+    })
+    articlesByCategory.value[categoryId] = articles
+  } catch (error) {
+    console.error('加载分类文章失败:', error)
+    articlesByCategory.value[categoryId] = []
+  } finally {
+    loading.value = false
+  }
+}
+
+// 监听 activeTab 变化，加载对应分类的文章
+watch(activeTab, (newVal) => {
+  if (newVal !== null) {
+    loadCategoryArticles(newVal)
+  }
+}, { immediate: true })
+
+onMounted(async () => {
+  loading.value = true
+  try {
+    // 获取分类列表
+    const categories = await categoryApi.getArticleCategoriesList()
+    tabs.value = categories
+    
+    // 设置默认选中第一个分类
+    if (categories.length > 0 && categories[0]) {
+      activeTab.value = categories[0].id
+    }
+  } catch (error) {
+    console.error('加载分类失败:', error)
+  } finally {
+    loading.value = false
+  }
 })
 </script>
 

@@ -9,9 +9,12 @@ const route = useRoute()
 const article = ref<Article | null>(null)
 const relatedArticles = ref<SidebarArticle[]>([])
 const loading = ref(true)
+const isLiked = ref(false)
+const liking = ref(false)
 
 const loadArticle = async () => {
   loading.value = true
+  isLiked.value = false
   try {
     const id = parseInt(route.params.id as string)
     article.value = await articleApi.getDetail(id)
@@ -20,6 +23,28 @@ const loadArticle = async () => {
     console.error('Failed to load article:', error)
   } finally {
     loading.value = false
+  }
+}
+
+// 点赞/取消点赞
+const toggleLike = async () => {
+  if (!article.value || liking.value) return
+  
+  liking.value = true
+  try {
+    if (isLiked.value) {
+      const result = await articleApi.unlike(article.value.id)
+      article.value.likeCount = result.likeCount
+      isLiked.value = false
+    } else {
+      const result = await articleApi.like(article.value.id)
+      article.value.likeCount = result.likeCount
+      isLiked.value = true
+    }
+  } catch (error) {
+    console.error('点赞操作失败:', error)
+  } finally {
+    liking.value = false
   }
 }
 
@@ -36,22 +61,34 @@ watch(() => route.params.id, () => {
   <article class="main-layout">
     <div class="main-content">
       <div class="article-wrapper white-bg" v-if="article">
+        <!-- 标题栏 -->
+        <div class="article-header">
+          <span class="category-tag">{{ article.category.name }}</span>
+          <span class="breadcrumb">
+            您现在的位置是：
+            <router-link to="/">网站首页</router-link>&gt;
+            <router-link :to="`/list/${article.category.slug}`">{{ article.category.name }}</router-link>
+          </span>
+        </div>
+        
         <!-- 文章标题 -->
         <h1 class="article-title">{{ article.title }}</h1>
         
-        <!-- 面包屑导航 -->
-        <div class="breadcrumb">
-          <router-link to="/">首页</router-link> &gt;
-          <router-link :to="`/list/${article.category.slug}`">{{ article.category.name }}</router-link> &gt;
-          <span>正文</span>
-        </div>
-        
         <!-- 文章信息 -->
         <div class="article-info">
-          <b>作者：</b>{{ article.author.name }}
-          <b>发布时间：</b>{{ article.createTime }}
-          <b>分类：</b>
-          <router-link :to="`/list/${article.category.slug}`">{{ article.category.name }}</router-link>
+          <i class="avatar">
+            <img src="http://oss.lqy-comic.com/attachments/20260126_IhNbsOYBzBbZJxj7.jpg" alt="头像">
+          </i>
+          <span class="author">枫叶</span>
+          <span class="date">{{ article.createTime }}</span>
+          <span class="category">【<router-link :to="`/list/${article.category.id}`">{{ article.category.name }}</router-link>】</span>
+          <span class="views">{{ article.viewCount || 0 }}人已围观</span>
+        </div>
+        
+        <!-- 文章摘要 -->
+        <div class="article-summary" v-if="article.summary">
+          <b>简介</b>
+          <p>{{ article.summary }}</p>
         </div>
         
         <!-- 文章内容 -->
@@ -63,8 +100,8 @@ watch(() => route.params.id, () => {
         </div>
         
         <!-- 点赞 -->
-        <div class="like-btn">
-          <a href="javascript:;">点赞 ({{ Math.floor(Math.random() * 100) }})</a>
+        <div class="like-btn" :class="{ liked: isLiked, loading: liking }">
+          <a href="javascript:;" @click="toggleLike">{{ isLiked ? '已点赞' : '点赞' }} ({{ article.likeCount || 0 }})</a>
         </div>
         
         <!-- 上一篇/下一篇 -->
@@ -159,14 +196,20 @@ watch(() => route.params.id, () => {
   @include card;
 }
 
-.article-title {
-  font-size: $font-size-xl;
-  margin-top: $spacing-lg;
-  line-height: 1.4;
+.article-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: $spacing-md;
+  border-bottom: 1px solid $border-color;
+  
+  .category-tag {
+    font-size: $font-size-md;
+    color: $text-primary;
+  }
 }
 
 .breadcrumb {
-  float: right;
   font-size: $font-size-sm;
   color: $text-secondary;
   
@@ -179,21 +222,69 @@ watch(() => route.params.id, () => {
   }
 }
 
+.article-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin: $spacing-lg 0 $spacing-md;
+  line-height: 1.4;
+  color: #333;
+}
+
 .article-info {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: $spacing-sm;
+  padding: $spacing-md 0;
+  border-bottom: 1px solid $border-color;
+  font-size: $font-size-sm;
   color: #888;
-  border: 1px solid #f3f3f3;
-  padding: $spacing-sm;
-  margin: $spacing-sm auto 0;
-  line-height: 23px;
-  background: $light-bg;
   
-  b {
-    margin-right: $spacing-sm;
-    color: #000;
+  .avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    overflow: hidden;
+    
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
   }
   
-  a {
-    color: $success;
+  .author {
+    color: #333;
+  }
+  
+  .category a {
+    color: $warning;
+    
+    &:hover {
+      color: $primary;
+    }
+  }
+  
+  .views {
+    color: #999;
+  }
+}
+
+.article-summary {
+  background: $light-bg;
+  padding: $spacing-md $spacing-lg;
+  margin: $spacing-lg 0;
+  border-left: 3px solid $primary;
+  
+  b {
+    color: #333;
+    margin-right: $spacing-sm;
+  }
+  
+  p {
+    display: inline;
+    color: #666;
+    line-height: 1.8;
   }
 }
 
@@ -243,11 +334,21 @@ watch(() => route.params.id, () => {
     color: $text-white;
     border-radius: $radius-sm;
     box-shadow: 1px 2px 6px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
     
     &:hover {
       background: color.adjust(#e2523a, $lightness: -10%);
       color: $text-white;
     }
+  }
+  
+  &.liked a {
+    background: #999;
+  }
+  
+  &.loading a {
+    opacity: 0.6;
+    pointer-events: none;
   }
 }
 

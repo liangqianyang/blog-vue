@@ -1,26 +1,81 @@
 <script setup lang="ts">
-import type { Article } from '@/types'
+import { ref, onMounted, watch } from 'vue'
+import type { Article, Tag } from '@/types'
+import { tagApi, articleApi } from '@/api'
 
-interface Props {
-  articles: Article[]
+const labels = ref<Tag[]>([])
+const activeLabel = ref<number | null>(null)
+const articles = ref<Article[]>([])
+const articlesByLabel = ref<Record<number, Article[]>>({})
+const loading = ref(false)
+
+// 切换标签
+const changeLabel = (labelId: number) => {
+  activeLabel.value = labelId
 }
 
-defineProps<Props>()
+// 加载标签下的文章
+const loadLabelArticles = async (labelId: number) => {
+  if (articlesByLabel.value[labelId]) {
+    articles.value = articlesByLabel.value[labelId]
+    return
+  }
+  loading.value = true
+  try {
+    const list = await articleApi.getTopRanked({
+      limit: 6,
+      label_id: labelId
+    })
+    articlesByLabel.value[labelId] = list
+    articles.value = list
+  } catch (error) {
+    console.error('加载标签文章失败:', error)
+    articles.value = []
+  } finally {
+    loading.value = false
+  }
+}
 
-const categories = ['原创模板', '古典', '清新', '低调']
+// 监听 activeLabel 变化
+watch(activeLabel, (newVal) => {
+  if (newVal !== null) {
+    loadLabelArticles(newVal)
+  }
+}, { immediate: true })
+
+onMounted(async () => {
+  try {
+    // 获取特别推荐标签列表
+    const tagList = await tagApi.getSpecialList()
+    labels.value = tagList
+    
+    // 设置默认选中第一个标签
+    if (tagList.length > 0 && tagList[0]) {
+      activeLabel.value = tagList[0].id
+    }
+  } catch (error) {
+    console.error('加载特别推荐标签失败:', error)
+  }
+})
 </script>
 
 <template>
   <div class="topic-list white-bg">
     <h2 class="section-title">
       <span class="nav-links">
-        <a v-for="cat in categories" :key="cat" href="/">{{ cat }}</a>
+        <a 
+          v-for="label in labels" 
+          :key="label.id" 
+          href="javascript:;"
+          :class="{ active: activeLabel === label.id }"
+          @click="changeLabel(label.id)"
+        >{{ label.name }}</a>
       </span>
       精彩专题
     </h2>
     
     <ul class="topic-grid">
-      <li v-for="article in articles.slice(0, 6)" :key="article.id">
+      <li v-for="article in articles" :key="article.id">
         <router-link :to="`/article/${article.id}`" class="topic-pic img-scale">
           <img :src="article.cover" :alt="article.title">
         </router-link>
@@ -53,6 +108,7 @@ const categories = ['原创模板', '古典', '清新', '低调']
     margin-right: $spacing-sm;
     padding-right: $spacing-sm;
     position: relative;
+    cursor: pointer;
     
     &::after {
       content: "/";
@@ -65,7 +121,8 @@ const categories = ['原创模板', '古典', '清新', '低调']
       content: "";
     }
     
-    &:hover {
+    &:hover,
+    &.active {
       color: $primary;
     }
   }
