@@ -12,17 +12,29 @@ const tags = ref<Tag[]>([])
 const showWechat = ref(false)
 
 onMounted(async () => {
-  try {
-    const [hotData, recommendData, tagsData] = await Promise.all([
-      articleApi.getHotList(8),
-      articleApi.getRecommendList(7),
-      tagApi.getList()
-    ])
-    hotArticles.value = hotData
-    recommendArticles.value = recommendData
-    tags.value = tagsData
-  } catch (error) {
-    console.error('Failed to load sidebar data:', error)
+  // 使用 Promise.allSettled 让每个请求独立处理，避免一个失败导致全部失败
+  const [hotResult, recommendResult, tagsResult] = await Promise.allSettled([
+    articleApi.getHotList(7),
+    articleApi.getRecommendList(7),
+    tagApi.getList()
+  ])
+  
+  if (hotResult.status === 'fulfilled') {
+    hotArticles.value = hotResult.value
+  } else {
+    console.error('Failed to load hot articles:', hotResult.reason)
+  }
+  
+  if (recommendResult.status === 'fulfilled') {
+    recommendArticles.value = recommendResult.value
+  } else {
+    console.error('Failed to load recommend articles:', recommendResult.reason)
+  }
+  
+  if (tagsResult.status === 'fulfilled') {
+    tags.value = tagsResult.value
+  } else {
+    console.error('Failed to load tags:', tagsResult.reason)
   }
 })
 </script>

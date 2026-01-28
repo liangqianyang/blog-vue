@@ -138,22 +138,42 @@ export const articleApi = {
     throw new Error('文章不存在')
   },
 
-  // 获取热门文章
-  async getHotList(limit = 8): Promise<SidebarArticle[]> {
+  // 获取热门文章（点击排行，按浏览量排序）
+  async getHotList(limit = 7): Promise<SidebarArticle[]> {
     if (USE_MOCK) {
       return mockData.getHotArticles(limit)
     }
-    const { data } = await api.get('/articles/hot', { params: { limit } })
-    return data
+    const { data } = await api.get('/articles/public/top-ranked', { 
+      params: { limit, order_by: 'view_count' } 
+    })
+    // 处理响应格式，转换为 SidebarArticle
+    if (data.code === 0 && Array.isArray(data.data)) {
+      return data.data.map((item: { id: number; title: string; thumbnail?: string }) => ({
+        id: item.id,
+        title: item.title,
+        cover: item.thumbnail
+      }))
+    }
+    return []
   },
 
-  // 获取推荐文章
+  // 获取推荐文章（站长推荐，按点赞数排序）
   async getRecommendList(limit = 7): Promise<SidebarArticle[]> {
     if (USE_MOCK) {
       return mockData.getRecommendArticles(limit)
     }
-    const { data } = await api.get('/articles/recommend', { params: { limit } })
-    return data
+    const { data } = await api.get('/articles/public/top-ranked', { 
+      params: { limit, order_by: 'like_count' } 
+    })
+    // 处理响应格式，转换为 SidebarArticle
+    if (data.code === 0 && Array.isArray(data.data)) {
+      return data.data.map((item: { id: number; title: string; thumbnail?: string }) => ({
+        id: item.id,
+        title: item.title,
+        cover: item.thumbnail
+      }))
+    }
+    return []
   },
 
   // 获取头条文章（按浏览量排序）
