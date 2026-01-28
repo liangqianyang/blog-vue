@@ -17,18 +17,18 @@ const totalPages = ref(1)
 const total = ref(0)
 const pageSize = 10
 
-// 随机颜色列表
+// 随机颜色列表（更亮的配色）
 const tagColors = [
-  '#3c9',
-  '#e27575',
-  '#e8a448',
-  '#95c6a4',
-  '#6f9bd1',
-  '#d4a5a5',
-  '#9c8ab4',
-  '#5dade2',
-  '#f7dc6f',
-  '#eb984e'
+  '#4dd4ac',
+  '#fc8d76',
+  '#ffba5a',
+  '#a8daba',
+  '#85c4f3',
+  '#f0a0a0',
+  '#b399d1',
+  '#70c3ff',
+  '#ffd966',
+  '#ff9f6e'
 ]
 
 // 为每个标签生成随机颜色
@@ -425,11 +425,13 @@ watch(() => route.query.keyword, () => {
     display: inline-block;
     padding: 5px 12px;
     border-radius: 3px;
-    color: $text-white;
+    color: #fff;
     font-size: 13px;
+    font-weight: 500;
     line-height: 1.4;
     transition: all 0.2s ease;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
     
     &:hover {
       transform: translateY(-2px);
