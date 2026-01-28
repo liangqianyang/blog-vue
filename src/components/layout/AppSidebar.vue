@@ -117,34 +117,7 @@ onMounted(async () => {
       </ul>
     </div>
 
-    <!-- 站点信息 -->
-    <div class="white-bg site-info">
-      <h2 class="section-title">站点信息</h2>
-      <ul>
-        <li><b>建站时间</b>：{{ appStore.siteInfo.createTime }}</li>
-        <li><b>网站程序</b>：{{ appStore.siteInfo.program }}</li>
-        <li>
-          <b>主题模板</b>：
-          <a href="http://www.yangqq.com" target="_blank">{{ appStore.siteInfo.theme }}</a>
-        </li>
-        <li><b>文章统计</b>：{{ appStore.siteInfo.articleCount }}条</li>
-        <li><b>文章评论</b>：{{ appStore.siteInfo.commentCount }}条</li>
-        <li><b>统计数据</b>：<a href="/">百度统计</a></li>
-        <li><b>微信公众号</b>：扫描二维码，关注我们</li>
-      </ul>
-      <img src="/images/wxgzh.jpg" alt="微信公众号" class="site-qrcode">
-    </div>
 
-    <!-- 友情链接 -->
-    <div class="white-bg links">
-      <h2 class="section-title">
-        <span class="link-apply"><a href="/">申请链接</a></span>
-        友情链接
-      </h2>
-      <ul>
-        <li><a href="http://www.yangqq.com" target="_blank">杨青青个人博客</a></li>
-      </ul>
-    </div>
   </aside>
 </template>
 
@@ -398,64 +371,7 @@ onMounted(async () => {
   }
 }
 
-// 站点信息
-.site-info {
-  li {
-    margin-bottom: 8px;
-    
-    b {
-      color: $text-primary;
-    }
-    
-    a {
-      color: $success;
-      
-      &:hover {
-        text-decoration: underline;
-        color: #000;
-      }
-    }
-  }
-}
 
-.site-qrcode {
-  width: 80%;
-  margin: $spacing-sm auto 0;
-}
-
-// 友情链接
-.links {
-  ul {
-    margin-top: $spacing-lg;
-    display: flex;
-    flex-wrap: wrap;
-  }
-  
-  li {
-    width: 50%;
-    line-height: 30px;
-    text-align: center;
-    
-    &:hover {
-      background: $hover-bg;
-    }
-  }
-}
-
-.link-apply {
-  float: right;
-  margin-right: $spacing-sm;
-  font-size: $font-size-sm;
-  
-  a {
-    color: $text-secondary;
-    
-    &:hover {
-      color: #000;
-      text-decoration: underline;
-    }
-  }
-}
 
 .img-scale {
   @include img-scale;

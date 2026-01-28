@@ -9,12 +9,8 @@ const currentYear = new Date().getFullYear()
       <div class="wx-box">
         <ul>
           <li>
-            <img src="/images/wxgzh.jpg" alt="微信公众号">
+            <img src="/images/lqy-comic_wxgzh.jpg" alt="微信公众号">
             <span>微信公众号</span>
-          </li>
-          <li>
-            <img src="/images/wx.png" alt="我的微信">
-            <span>我的微信</span>
           </li>
         </ul>
       </div>
@@ -22,13 +18,12 @@ const currentYear = new Date().getFullYear()
       <!-- 站点声明 -->
       <div class="footer-nav">
         <p><b>站点声明：</b></p>
-        <p>1、本站个人博客模板，均为杨青青本人设计，个人可以使用，但是未经许可不得用于任何商业目的。</p>
-        <p>2、所有文章未经授权禁止转载、摘编、复制或建立镜像，如有违反，追究法律责任。举报邮箱：<a href="mailto:dacesmiling@qq.com">dacesmiling@qq.com</a></p>
+        <p>所有文章未经授权禁止转载、摘编、复制或建立镜像，如有违反，追究法律责任。举报邮箱：<a href="mailto:liangqy@proton.me">liangqy@proton.me</a></p>
         <p>
           Copyright © {{ currentYear }} 
-          <a href="http://www.yangqq.com" target="_blank">www.yangqq.com</a> 
+          <a href="http://lqy-comic.com" target="_blank">lqy-comic.com</a> 
           All Rights Reserved. 
-          备案号：<a href="http://www.miitbeian.gov.cn/" target="_blank" rel="noopener">蜀ICP备11002373号-1</a>
+          备案号：<a href="http://www.miitbeian.gov.cn/" target="_blank" rel="noopener">皖ICP备18005512号-1</a>
         </p>
       </div>
     </div>
@@ -51,7 +46,10 @@ const currentYear = new Date().getFullYear()
 .footer-content {
   width: $container-width;
   margin: 0 auto;
-  @include clearfix;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: $spacing-lg;
   
   @include respond-to('xl') {
     width: 100%;
@@ -59,28 +57,14 @@ const currentYear = new Date().getFullYear()
   }
   
   @include respond-to('md') {
+    flex-direction: column;
+    align-items: center;
     text-align: center;
   }
 }
 
 .wx-box {
-  float: left;
-  margin-right: $spacing-lg;
-  
-  @include respond-to('md') {
-    float: none;
-    margin-right: 0;
-    margin-bottom: $spacing-lg;
-  }
-  
-  ul {
-    display: flex;
-    gap: $spacing-lg;
-    
-    @include respond-to('md') {
-      justify-content: center;
-    }
-  }
+  flex-shrink: 0;
   
   li {
     text-align: center;
@@ -98,7 +82,11 @@ const currentYear = new Date().getFullYear()
 }
 
 .footer-nav {
-  overflow: hidden;
+  text-align: left;
+  
+  @include respond-to('md') {
+    text-align: center;
+  }
   
   b {
     font-size: $font-size-md;
