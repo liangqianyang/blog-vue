@@ -1,22 +1,46 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { useAppStore } from '@/stores'
 import { articleApi, tagApi } from '@/api'
-import type { SidebarArticle, Tag } from '@/types'
-
-const appStore = useAppStore()
+import type { SidebarArticle, Label } from '@/types'
 
 const hotArticles = ref<SidebarArticle[]>([])
 const recommendArticles = ref<SidebarArticle[]>([])
-const tags = ref<Tag[]>([])
-const showWechat = ref(false)
+const labels = ref<Label[]>([])
+
+// 随机颜色列表
+const tagColors = [
+  '#3c9',
+  '#e27575',
+  '#e8a448',
+  '#95c6a4',
+  '#6f9bd1',
+  '#d4a5a5',
+  '#9c8ab4',
+  '#5dade2',
+  '#f7dc6f',
+  '#eb984e'
+]
+
+// 为每个标签生成随机颜色
+const labelColors = ref<Map<number, string>>(new Map())
+
+const getRandomColor = (id: number): string => {
+  if (!labelColors.value.has(id)) {
+    const randomIndex = Math.floor(Math.random() * tagColors.length)
+    const color = tagColors[randomIndex]
+    if (color) {
+      labelColors.value.set(id, color)
+    }
+  }
+  return labelColors.value.get(id) || tagColors[0] || '#3c9'
+}
 
 onMounted(async () => {
   // 使用 Promise.allSettled 让每个请求独立处理，避免一个失败导致全部失败
-  const [hotResult, recommendResult, tagsResult] = await Promise.allSettled([
+  const [hotResult, recommendResult, labelsResult] = await Promise.allSettled([
     articleApi.getHotList(7),
     articleApi.getRecommendList(7),
-    tagApi.getList()
+    tagApi.getPublicList()
   ])
   
   if (hotResult.status === 'fulfilled') {
@@ -30,11 +54,11 @@ onMounted(async () => {
   } else {
     console.error('Failed to load recommend articles:', recommendResult.reason)
   }
-  
-  if (tagsResult.status === 'fulfilled') {
-    tags.value = tagsResult.value
+
+  if (labelsResult.status === 'fulfilled') {
+    labels.value = labelsResult.value
   } else {
-    console.error('Failed to load tags:', tagsResult.reason)
+    console.error('Failed to load labels:', labelsResult.reason)
   }
 })
 </script>
@@ -77,6 +101,22 @@ onMounted(async () => {
           <router-link :to="`/article/${article.id}`">{{ article.title }}</router-link>
         </li>
       </ul>
+    </div>
+
+    <!-- 标签云 -->
+    <div class="white-bg tag-cloud" v-if="labels.length > 0">
+      <h2 class="section-title">标签云</h2>
+      <div class="tag-list">
+        <router-link 
+          v-for="label in labels.filter(l => l.title)" 
+          :key="label.id" 
+          :to="`/list?label_id=${label.id}`"
+          class="tag-item"
+          :style="{ backgroundColor: getRandomColor(label.id) }"
+        >
+          {{ label.title }}
+        </router-link>
+      </div>
     </div>
 
     <!-- 站长推荐 -->
@@ -265,6 +305,37 @@ onMounted(async () => {
     
     &:nth-child(-n+3) i {
       background: $warning;
+    }
+  }
+}
+
+// 标签云
+.tag-cloud {
+  .tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding-top: $spacing-md;
+  }
+  
+  .tag-item {
+    display: inline-block;
+    padding: 5px 12px;
+    border-radius: 3px;
+    color: $text-white;
+    font-size: 13px;
+    line-height: 1.4;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+      filter: brightness(1.1);
+    }
+    
+    &:empty {
+      display: none;
     }
   }
 }

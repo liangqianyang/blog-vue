@@ -59,7 +59,7 @@ const handleNavClick = (item: typeof navItems.value[0]) => {
       
       <!-- Logo -->
       <div class="logo">
-        <router-link to="/">枫叶个人博客</router-link>
+        <router-link to="/">枫叶博客</router-link>
       </div>
       
       <!-- 导航菜单 -->

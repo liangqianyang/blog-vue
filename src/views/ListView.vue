@@ -2,7 +2,7 @@
 import { ref, onMounted, watch, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { articleApi, tagApi } from '@/api'
-import type { Article, Tag } from '@/types'
+import type { Article, Label } from '@/types'
 
 import BlogList from '@/components/home/BlogList.vue'
 import Pagination from '@/components/common/Pagination.vue'
@@ -10,12 +10,40 @@ import Pagination from '@/components/common/Pagination.vue'
 const route = useRoute()
 
 const articles = ref<Article[]>([])
-const tags = ref<Tag[]>([])
+const labels = ref<Label[]>([])
 const loading = ref(true)
 const currentPage = ref(1)
 const totalPages = ref(1)
 const total = ref(0)
 const pageSize = 10
+
+// 随机颜色列表
+const tagColors = [
+  '#3c9',
+  '#e27575',
+  '#e8a448',
+  '#95c6a4',
+  '#6f9bd1',
+  '#d4a5a5',
+  '#9c8ab4',
+  '#5dade2',
+  '#f7dc6f',
+  '#eb984e'
+]
+
+// 为每个标签生成随机颜色
+const labelColors = ref<Map<number, string>>(new Map())
+
+const getRandomColor = (id: number): string => {
+  if (!labelColors.value.has(id)) {
+    const randomIndex = Math.floor(Math.random() * tagColors.length)
+    const color = tagColors[randomIndex]
+    if (color) {
+      labelColors.value.set(id, color)
+    }
+  }
+  return labelColors.value.get(id) || tagColors[0] || '#3c9'
+}
 
 const categoryName = computed(() => {
   const category = route.params.category as string
@@ -62,9 +90,9 @@ const loadArticles = async () => {
 
 const loadTags = async () => {
   try {
-    tags.value = await tagApi.getList()
+    labels.value = await tagApi.getPublicList()
   } catch (error) {
-    console.error('Failed to load tags:', error)
+    console.error('Failed to load labels:', error)
   }
 }
 
@@ -159,18 +187,19 @@ watch(() => route.query.keyword, () => {
       </div>
       
       <!-- 标签云 -->
-      <div class="white-bg cloud">
+      <div class="white-bg tag-cloud" v-if="labels.length > 0">
         <h2 class="section-title">标签云</h2>
-        <ul>
-          <a 
-            v-for="tag in tags" 
-            :key="tag.id" 
-            href="/"
-            :style="{ background: tag.color }"
+        <div class="tag-list">
+          <router-link 
+            v-for="label in labels.filter(l => l.title)" 
+            :key="label.id" 
+            :to="`/list?label_id=${label.id}`"
+            class="tag-item"
+            :style="{ backgroundColor: getRandomColor(label.id) }"
           >
-            {{ tag.name }}
-          </a>
-        </ul>
+            {{ label.title }}
+          </router-link>
+        </div>
       </div>
     </aside>
   </article>
@@ -384,25 +413,32 @@ watch(() => route.query.keyword, () => {
 }
 
 // 标签云
-.cloud {
-  ul {
+.tag-cloud {
+  .tag-list {
     display: flex;
     flex-wrap: wrap;
-    gap: $spacing-xs;
-    margin-top: $spacing-sm;
+    gap: 8px;
+    padding-top: $spacing-md;
   }
   
-  a {
-    line-height: 24px;
-    padding: 3px $spacing-sm;
-    border-radius: $radius-sm;
+  .tag-item {
+    display: inline-block;
+    padding: 5px 12px;
+    border-radius: 3px;
     color: $text-white;
-    font-size: $font-size-sm;
-    transition: $transition-slow;
+    font-size: 13px;
+    line-height: 1.4;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     
     &:hover {
-      border-radius: 0;
-      text-shadow: #000 1px 1px 1px;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+      filter: brightness(1.1);
+    }
+    
+    &:empty {
+      display: none;
     }
   }
 }

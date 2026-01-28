@@ -6,6 +6,7 @@ import type {
   PaginatedResponse, 
   SidebarArticle,
   Tag,
+  Label,
   BlogSite,
   AboutInfo
 } from '@/types'
@@ -294,6 +295,18 @@ export const tagApi = {
         id: item.id,
         name: item.title
       }))
+    }
+    return []
+  },
+
+  // 获取所有标签列表（标签云）
+  async getPublicList(): Promise<Label[]> {
+    if (USE_MOCK) {
+      return []
+    }
+    const { data } = await api.get('/labels/public/list')
+    if (data.code === 0 && Array.isArray(data.data)) {
+      return data.data
     }
     return []
   }

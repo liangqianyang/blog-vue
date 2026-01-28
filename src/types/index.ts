@@ -89,6 +89,15 @@ export interface Tag {
   color?: string
 }
 
+// 标签（从接口返回）
+export interface Label {
+  id: number
+  title: string
+  is_special: string
+  created_at: string
+  updated_at: string
+}
+
 // 博客推荐站点
 export interface BlogSite {
   id: number
