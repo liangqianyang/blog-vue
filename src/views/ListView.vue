@@ -2,7 +2,7 @@
 import { ref, onMounted, watch, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useAppStore } from '@/stores'
-import { articleApi, tagApi } from '@/api'
+import { articleApi, tagApi, searchApi } from '@/api'
 import type { Article, Label, NavItem } from '@/types'
 
 import BlogList from '@/components/home/BlogList.vue'
@@ -62,10 +62,16 @@ const currentNav = computed(() => {
 })
 
 const categoryName = computed(() => {
+  if (route.query.keyword) {
+    return `搜索结果: "${route.query.keyword}"`
+  }
   return currentNav.value?.name || '文章列表'
 })
 
 const categoryDesc = computed(() => {
+  if (route.query.keyword) {
+    return `共找到 ${total.value} 篇关于 "${route.query.keyword}" 的文章`
+  }
   return currentNav.value?.description || '暂无简介'
 })
 
@@ -83,15 +89,24 @@ const loadArticles = async () => {
   loading.value = true
   try {
     const category = route.params.category as string
-    // keyword can be used for search filtering in the future
-    const _keyword = route.query.keyword as string
-    void _keyword // suppress unused variable warning
+    const keyword = route.query.keyword as string
     
-    const data = await articleApi.getList({
-      category,
-      page: currentPage.value,
-      pageSize
-    })
+    let data;
+    if (keyword) {
+      // 如果有关键词，调用搜索接口
+      data = await searchApi.search({
+        keyword,
+        page: currentPage.value,
+        per_page: pageSize
+      })
+    } else {
+      // 否则调用普通列表接口
+      data = await articleApi.getList({
+        category,
+        page: currentPage.value,
+        pageSize
+      })
+    }
     
     articles.value = data.list
     total.value = data.total
@@ -145,7 +160,7 @@ watch(() => route.query.keyword, () => {
       </div>
       
       <!-- 文章列表 -->
-      <BlogList :articles="articles" :show-title="true" />
+      <BlogList :articles="articles" :show-title="!route.query.keyword" />
       
       <!-- 分页 -->
       <Pagination 

@@ -366,12 +366,61 @@ export const aboutApi = {
 
 // 搜索 API
 export const searchApi = {
-  async search(keyword: string): Promise<Article[]> {
+  async search(params: { 
+    keyword: string
+    page?: number
+    per_page?: number
+    category_id?: number
+    label_id?: number 
+  }): Promise<PaginatedResponse<Article>> {
     if (USE_MOCK) {
-      return mockData.searchArticles(keyword)
+      // Mock search implementation
+      const results = mockData.searchArticles(params.keyword)
+      return {
+        list: results,
+        total: results.length,
+        page: params.page || 1,
+        pageSize: params.per_page || 15
+      }
     }
-    const { data } = await api.post('/search', { keyword })
-    return data
+    const { data } = await api.get('/articles/search', { params })
+    if (data.code === 0 && data.data) {
+      const articles = data.data.items.map((item: {
+        id: number
+        title: string
+        summary: string
+        content?: string
+        thumbnail?: string
+        category_name?: string
+        category_id?: number
+        labels?: { id: number; title: string }[]
+        published_at?: string
+        created_at?: string
+        is_top?: boolean
+        view_count?: number
+        _highlight?: { title?: string[]; summary?: string[] }
+      }) => {
+        const article = mapArticleFromApi(item)
+        // 处理高亮
+        if (item._highlight) {
+          if (item._highlight.title) {
+            article.title = item._highlight.title.join('')
+          }
+          if (item._highlight.summary) {
+            article.summary = item._highlight.summary.join('')
+          }
+        }
+        return article
+      })
+      
+      return {
+        list: articles,
+        total: data.data.total,
+        page: data.data.page,
+        pageSize: data.data.per_page
+      }
+    }
+    return { list: [], total: 0, page: 1, pageSize: 15 }
   }
 }
 

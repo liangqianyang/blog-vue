@@ -121,3 +121,12 @@
   background: $primary;
   color: $text-white;
 }
+
+// ==========================================
+// 搜索高亮样式
+// ==========================================
+em.highlight {
+  color: #f00;
+  font-style: normal;
+  font-weight: bold;
+}

@@ -1,24 +1,34 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import type { Article } from '@/types'
 import { articleApi } from '@/api'
 
+console.log('BlogList setup')
+
 interface Props {
   showTitle?: boolean
+  articles?: Article[]
 }
 
-withDefaults(defineProps<Props>(), {
-  showTitle: true
+const props = withDefaults(defineProps<Props>(), {
+  showTitle: true,
+  articles: undefined
 })
 
-const articles = ref<Article[]>([])
+const localArticles = ref<Article[]>([])
 const loading = ref(false)
 
+const displayArticles = computed(() => {
+  return props.articles || localArticles.value
+})
+
 onMounted(async () => {
+  if (props.articles) return
+
   loading.value = true
   try {
     const result = await articleApi.getPublicList({ page: 1, per_page: 15 })
-    articles.value = result.list
+    localArticles.value = result.list
   } catch (error) {
     console.error('加载文章列表失败:', error)
   } finally {
@@ -32,12 +42,12 @@ onMounted(async () => {
     <h2 v-if="showTitle" class="section-title">最新博文</h2>
     
     <ul>
-      <li v-for="article in articles" :key="article.id" :class="{ 'has-images': article.images }">
+      <li v-for="article in displayArticles" :key="article.id" :class="{ 'has-images': article.images }">
         <!-- 文章标题 -->
         <h3 class="blog-title">
           <router-link :to="`/article/${article.id}`" target="_blank">
             <b v-if="article.isTop">【顶】</b>
-            {{ article.title }}
+            <span v-html="article.title"></span>
           </router-link>
         </h3>
         
@@ -65,7 +75,7 @@ onMounted(async () => {
         </template>
         
         <!-- 文章摘要 -->
-        <p class="blog-text">{{ article.summary }}</p>
+        <p class="blog-text" v-html="article.summary"></p>
         
         <!-- 文章信息 -->
         <p class="blog-info">
