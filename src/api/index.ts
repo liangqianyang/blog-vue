@@ -9,7 +9,9 @@ import type {
   Label,
   BlogSite,
   AboutInfo,
-  Announcement
+  Announcement,
+  NavItem,
+  AboutMe
 } from '@/types'
 import { mockData } from './mock'
 
@@ -330,8 +332,34 @@ export const aboutApi = {
     if (USE_MOCK) {
       return mockData.getAboutInfo()
     }
-    const { data } = await api.get('/about')
-    return data
+    const { data } = await api.get('/about-me/public')
+    if (data.code === 0 && data.data) {
+      const item: AboutMe = data.data
+      return {
+        name: item.nickname || item.name,
+        avatar: item.avatar ? item.avatar.replace(/`/g, '').trim() : '',
+        title: item.profession || '',
+        description: item.slogan || item.location || '',
+        intro: item.bio || '',
+        experiences: [],
+        blogs: [],
+        contacts: [
+          ...(item.email ? [{
+            type: 'wechat' as const, // 临时借用类型
+            qrcode: '',
+            title: 'Email',
+            subtitle: item.email
+          }] : []),
+          ...(item.github ? [{
+            type: 'wechat' as const,
+            qrcode: '',
+            title: 'GitHub',
+            subtitle: item.github
+          }] : [])
+        ]
+      }
+    }
+    throw new Error('获取关于信息失败')
   }
 }
 
@@ -367,6 +395,20 @@ export const announcementApi = {
         link: item.link,
         sort: item.sort
       }))
+    }
+    return []
+  }
+}
+
+// 站点导航 API
+export const siteNavApi = {
+  async getList(): Promise<NavItem[]> {
+    if (USE_MOCK) {
+      return []
+    }
+    const { data } = await api.get('/site-navs/public/list')
+    if (data.code === 0 && Array.isArray(data.data)) {
+      return data.data
     }
     return []
   }

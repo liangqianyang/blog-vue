@@ -1,13 +1,15 @@
 <script setup lang="ts">
 import { ref, onMounted, watch, computed } from 'vue'
 import { useRoute } from 'vue-router'
+import { useAppStore } from '@/stores'
 import { articleApi, tagApi } from '@/api'
-import type { Article, Label } from '@/types'
+import type { Article, Label, NavItem } from '@/types'
 
 import BlogList from '@/components/home/BlogList.vue'
 import Pagination from '@/components/common/Pagination.vue'
 
 const route = useRoute()
+const appStore = useAppStore()
 
 const articles = ref<Article[]>([])
 const labels = ref<Label[]>([])
@@ -45,23 +47,36 @@ const getRandomColor = (id: number): string => {
   return labelColors.value.get(id) || tagColors[0] || '#3c9'
 }
 
-const categoryName = computed(() => {
-  const category = route.params.category as string
-  const categoryMap: Record<string, string> = {
-    diary: '个人博客日记',
-    web: '博客网站制作',
-    design: '网页设计心得',
-    tools: '推荐工具',
-    js: 'JS经典实例',
-    build: '网站建设',
-    css: 'CSS3|Html5',
-    notes: '心得笔记'
+const currentNav = computed(() => {
+  const findItem = (items: NavItem[]): NavItem | undefined => {
+    for (const item of items) {
+      if (item.path === route.path) return item
+      if (item.children) {
+        const found = findItem(item.children)
+        if (found) return found
+      }
+    }
+    return undefined
   }
-  return categoryMap[category] || '文章列表'
+  return findItem(appStore.navItems)
+})
+
+const categoryName = computed(() => {
+  return currentNav.value?.name || '文章列表'
 })
 
 const categoryDesc = computed(() => {
-  return '个人博客日记，记录一些优秀个人站长是如何制作个人博客，建个人博客、以及经营个人网站的，本站还会推荐一些优秀的个人博客站长网站。'
+  return currentNav.value?.description || '暂无简介'
+})
+
+const categoryCover = computed(() => {
+  // Clean up cover URL if it contains backticks or extra spaces as seen in the user input example
+  // User input example: " `http://...` "
+  let cover = currentNav.value?.cover
+  if (cover) {
+    cover = cover.replace(/`/g, '').trim()
+  }
+  return cover || '/images/lm01.jpg'
 })
 
 const loadArticles = async () => {
@@ -124,7 +139,7 @@ watch(() => route.query.keyword, () => {
     <div class="main-content">
       <!-- 栏目介绍 -->
       <div class="category-intro white-bg">
-        <img src="/images/lm01.jpg" alt="栏目图片">
+        <img :src="categoryCover" alt="栏目图片">
         <h1>{{ categoryName }}</h1>
         <p>{{ categoryDesc }}</p>
       </div>

@@ -33,13 +33,30 @@ const isActive = (path: string) => {
   return route.path.startsWith(path)
 }
 
+const navigate = (item: typeof navItems.value[0]) => {
+  if (item.linkType === 1) { // External
+    if (item.openNewWindow) {
+      window.open(item.path, '_blank')
+    } else {
+      window.location.href = item.path
+    }
+  } else { // Internal
+    if (item.openNewWindow) {
+      const routeUrl = router.resolve({ path: item.path }).href
+      window.open(routeUrl, '_blank')
+    } else {
+      router.push(item.path)
+    }
+  }
+  isMenuOpen.value = false
+  openSubmenu.value = null
+}
+
 const handleNavClick = (item: typeof navItems.value[0]) => {
-  if (item.children && window.innerWidth <= 768) {
+  if (item.children && item.children.length > 0 && window.innerWidth <= 768) {
     toggleSubmenu(item.id)
   } else {
-    router.push(item.path)
-    isMenuOpen.value = false
-    openSubmenu.value = null
+    navigate(item)
   }
 }
 </script>
@@ -69,7 +86,7 @@ const handleNavClick = (item: typeof navItems.value[0]) => {
             v-for="item in navItems" 
             :key="item.id"
             :class="{ 
-              'has-submenu': item.children,
+              'has-submenu': item.children && item.children.length > 0,
               'submenu-open': openSubmenu === item.id
             }"
             @mouseleave="closeSubmenu"
@@ -82,14 +99,13 @@ const handleNavClick = (item: typeof navItems.value[0]) => {
             </a>
             
             <!-- 子菜单 -->
-            <ul v-if="item.children" class="submenu">
+            <ul v-if="item.children && item.children.length > 0" class="submenu">
               <li v-for="child in item.children" :key="child.id">
-                <router-link 
-                  :to="child.path"
-                  @click="isMenuOpen = false; closeSubmenu()"
+                <a 
+                  @click.prevent="navigate(child)"
                 >
                   {{ child.name }}
-                </router-link>
+                </a>
               </li>
             </ul>
           </li>

@@ -42,6 +42,10 @@ export interface NavItem {
   id: number
   name: string
   path: string
+  description?: string | null
+  cover?: string | null
+  linkType?: number
+  openNewWindow?: boolean
   children?: NavItem[]
 }
 
@@ -106,18 +110,6 @@ export interface BlogSite {
   category?: string
 }
 
-// 关于页信息
-export interface AboutInfo {
-  name: string
-  avatar: string
-  title: string
-  description: string
-  intro: string
-  experiences: Experience[]
-  blogs: BlogInfo[]
-  contacts: Contact[]
-}
-
 export interface Experience {
   id: number
   title: string
@@ -138,6 +130,36 @@ export interface Contact {
   qrcode: string
   title: string
   subtitle: string
+}
+
+// 个人信息 API 响应
+export interface AboutMe {
+  id: number
+  avatar: string
+  name: string
+  nickname: string
+  slogan: string
+  company: string
+  bio: string
+  profession: string
+  location: string
+  email: string
+  github: string
+  weibo: string
+  created_at: string
+  updated_at: string
+}
+
+// 关于页信息（视图层使用）
+export interface AboutInfo {
+  name: string
+  avatar: string
+  title: string
+  description: string
+  intro: string
+  experiences?: Experience[]
+  blogs?: BlogInfo[]
+  contacts?: Contact[]
 }
 
 // 公告
