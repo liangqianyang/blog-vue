@@ -2,8 +2,8 @@
 import { ref, onMounted, watch, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useAppStore } from '@/stores'
-import { articleApi, tagApi, searchApi } from '@/api'
-import type { Article, Label, NavItem } from '@/types'
+import { articleApi, tagApi, searchApi, categoryApi } from '@/api'
+import type { Article, Label, NavItem, Category } from '@/types'
 
 import BlogList from '@/components/home/BlogList.vue'
 import Pagination from '@/components/common/Pagination.vue'
@@ -88,7 +88,7 @@ const categoryCover = computed(() => {
 const loadArticles = async () => {
   loading.value = true
   try {
-    const category = route.params.category as string
+    const categorySlug = route.params.category as string
     const keyword = route.query.keyword as string
     
     let data;
@@ -100,11 +100,49 @@ const loadArticles = async () => {
         per_page: pageSize
       })
     } else {
-      // 否则调用普通列表接口
-      data = await articleApi.getList({
-        category,
+      // 获取分类列表以查找 category_id
+      let categoryId: number | undefined
+      if (categorySlug) {
+        // 如果 categorySlug 是数字，直接作为 ID 使用
+        if (/^\d+$/.test(categorySlug)) {
+          categoryId = parseInt(categorySlug, 10)
+        } else {
+          // 尝试从导航数据中查找 ID
+          const findCategoryInNav = (items: NavItem[]): number | undefined => {
+            for (const item of items) {
+              // 匹配路径 /list/slug
+              if (item.path === `/list/${categorySlug}`) return item.id
+              if (item.children) {
+                const found = findCategoryInNav(item.children)
+                if (found) return found
+              }
+            }
+            return undefined
+          }
+          
+          categoryId = findCategoryInNav(appStore.navItems)
+          
+          // 如果导航中没找到，尝试从分类列表中查找
+          if (!categoryId) {
+            // 调用分类接口获取所有分类
+            const categories = await categoryApi.getArticleCategoriesList()
+            // 尝试匹配 slug 或 name
+            const matchedCategory = categories.find(c => c.slug === categorySlug || c.name === categorySlug)
+            
+            if (matchedCategory) {
+              categoryId = matchedCategory.id
+            } else {
+               console.warn(`未找到分类: ${categorySlug}`)
+            }
+          }
+        }
+      }
+
+      // 调用公开文章列表接口
+      data = await articleApi.getPublicList({
+        category_id: categoryId,
         page: currentPage.value,
-        pageSize
+        per_page: pageSize
       })
     }
     
