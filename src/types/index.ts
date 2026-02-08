@@ -139,3 +139,12 @@ export interface Contact {
   title: string
   subtitle: string
 }
+
+// 公告
+export interface Announcement {
+  id: number
+  title: string
+  content?: string
+  link?: string
+  sort?: number
+}

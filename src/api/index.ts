@@ -8,7 +8,8 @@ import type {
   Tag,
   Label,
   BlogSite,
-  AboutInfo
+  AboutInfo,
+  Announcement
 } from '@/types'
 import { mockData } from './mock'
 
@@ -342,6 +343,32 @@ export const searchApi = {
     }
     const { data } = await api.post('/search', { keyword })
     return data
+  }
+}
+
+// 公告 API
+export const announcementApi = {
+  async getEnabledList(): Promise<Announcement[]> {
+    if (USE_MOCK) {
+      return []
+    }
+    const { data } = await api.get('/announcements/public/enabled')
+    if (data.code === 0 && Array.isArray(data.data)) {
+      return data.data.map((item: {
+        id: number
+        title: string
+        content?: string
+        link?: string
+        sort?: number
+      }) => ({
+        id: item.id,
+        title: item.title,
+        content: item.content,
+        link: item.link,
+        sort: item.sort
+      }))
+    }
+    return []
   }
 }
 

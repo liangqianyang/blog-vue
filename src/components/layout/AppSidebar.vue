@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { articleApi, tagApi } from '@/api'
-import type { SidebarArticle, Label } from '@/types'
+import { articleApi, tagApi, announcementApi } from '@/api'
+import type { SidebarArticle, Label, Announcement } from '@/types'
 
 const hotArticles = ref<SidebarArticle[]>([])
 const recommendArticles = ref<SidebarArticle[]>([])
 const labels = ref<Label[]>([])
+const announcements = ref<Announcement[]>([])
 
 // 随机颜色列表（更亮的配色）
 const tagColors = [
@@ -37,10 +38,11 @@ const getRandomColor = (id: number): string => {
 
 onMounted(async () => {
   // 使用 Promise.allSettled 让每个请求独立处理，避免一个失败导致全部失败
-  const [hotResult, recommendResult, labelsResult] = await Promise.allSettled([
+  const [hotResult, recommendResult, labelsResult, announcementsResult] = await Promise.allSettled([
     articleApi.getHotList(7),
     articleApi.getRecommendList(7),
-    tagApi.getPublicList()
+    tagApi.getPublicList(),
+    announcementApi.getEnabledList()
   ])
   
   if (hotResult.status === 'fulfilled') {
@@ -60,6 +62,12 @@ onMounted(async () => {
   } else {
     console.error('Failed to load labels:', labelsResult.reason)
   }
+
+  if (announcementsResult.status === 'fulfilled') {
+    announcements.value = announcementsResult.value
+  } else {
+    console.error('Failed to load announcements:', announcementsResult.reason)
+  }
 })
 </script>
 
@@ -76,13 +84,18 @@ onMounted(async () => {
     </div>
 
     <!-- 网站公告 -->
-    <div class="white-bg notice">
+    <div class="white-bg notice" v-if="announcements.length > 0">
       <h2 class="section-title">网站公告</h2>
       <ul>
-        <li><router-link to="/article/12">十条设计原则教你学会如何设计网页布局!</router-link></li>
-        <li><router-link to="/article/1">用js+css3来写一个手机栏目导航</router-link></li>
-        <li><router-link to="/article/2">6条网页设计配色原则,让你秒变配色高手</router-link></li>
-        <li><router-link to="/article/3">三步实现滚动条触动css动画效果</router-link></li>
+        <li v-for="announcement in announcements" :key="announcement.id">
+          <router-link 
+            v-if="announcement.link" 
+            :to="announcement.link"
+          >
+            {{ announcement.title }}
+          </router-link>
+          <span v-else>{{ announcement.title }}</span>
+        </li>
       </ul>
     </div>
 
