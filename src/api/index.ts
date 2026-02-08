@@ -11,7 +11,8 @@ import type {
   AboutInfo,
   Announcement,
   NavItem,
-  AboutMe
+  AboutMe,
+  Message
 } from '@/types'
 import { mockData } from './mock'
 
@@ -411,6 +412,39 @@ export const siteNavApi = {
       return data.data
     }
     return []
+  }
+}
+
+// 留言 API
+export const messageApi = {
+  // 获取留言列表
+  async getList(params?: { page?: number; pageSize?: number }): Promise<PaginatedResponse<Message>> {
+    if (USE_MOCK) {
+      return mockData.getMessages(params)
+    }
+    const { data } = await api.get('/messages/public', { params })
+    // 如果后端返回结构不同，这里可能需要适配
+    if (data.code === 0 && data.data) {
+       return {
+         list: data.data.data,
+         total: data.data.meta.total,
+         page: data.data.meta.current_page,
+         pageSize: data.data.meta.per_page
+       }
+    }
+    return { list: [], total: 0, page: 1, pageSize: 10 }
+  },
+
+  // 发表留言
+  async create(data: { content: string; nickname: string; email?: string }): Promise<Message> {
+    if (USE_MOCK) {
+      return mockData.createMessage(data)
+    }
+    const { data: res } = await api.post('/messages/public', data)
+    if (res.code === 0) {
+      return res.data
+    }
+    throw new Error(res.message || '留言提交失败')
   }
 }
 

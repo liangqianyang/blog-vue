@@ -6,7 +6,8 @@ import type {
   SidebarArticle,
   Tag,
   BlogSite,
-  AboutInfo
+  AboutInfo,
+  Message
 } from '@/types'
 
 // 默认作者
@@ -236,6 +237,30 @@ const aboutInfo: AboutInfo = {
   ]
 }
 
+// 留言数据
+const messages: Message[] = [
+  {
+    id: 1,
+    content: '非常喜欢你的博客设计，简洁大方！',
+    nickname: '设计爱好者',
+    avatar: '/images/avatar.jpg',
+    createTime: '2023-05-20 14:30'
+  },
+  {
+    id: 2,
+    content: '博主的文章写得很好，受益匪浅。',
+    nickname: '前端小白',
+    avatar: '/images/avatar.jpg',
+    createTime: '2023-05-21 09:15'
+  },
+  {
+    id: 3,
+    content: '请问这个博客模板开源吗？',
+    nickname: '求知者',
+    createTime: '2023-05-22 16:45'
+  }
+]
+
 // Mock 数据方法
 export const mockData = {
   // 获取文章列表
@@ -329,7 +354,36 @@ export const mockData = {
   // 按分类获取文章（用于 Tab 切换）
   getArticlesByCategory(categoryId: number): Article[] {
     return articles.filter(a => a.category.id === categoryId).slice(0, 5)
+  },
+
+  // 获取留言列表
+  getMessages(params?: { page?: number; pageSize?: number }): PaginatedResponse<Message> {
+    const page = params?.page || 1
+    const pageSize = params?.pageSize || 10
+    const start = (page - 1) * pageSize
+    const end = start + pageSize
+    
+    return {
+      list: messages.slice(start, end),
+      total: messages.length,
+      page,
+      pageSize
+    }
+  },
+
+  // 提交留言
+  createMessage(data: { content: string; nickname: string; email?: string }): Message {
+    const newMessage: Message = {
+      id: messages.length + 1,
+      content: data.content,
+      nickname: data.nickname,
+      email: data.email,
+      createTime: new Date().toLocaleString(),
+      avatar: '/images/default-avatar.jpg'
+    }
+    messages.unshift(newMessage)
+    return newMessage
   }
 }
 
-export { categories, articles, banners, tags, blogSites, aboutInfo }
+export { categories, articles, banners, tags, blogSites, aboutInfo, messages }

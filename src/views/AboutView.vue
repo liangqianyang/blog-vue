@@ -2,6 +2,7 @@
 import { ref, onMounted } from 'vue'
 import { aboutApi, articleApi } from '@/api'
 import type { AboutInfo } from '@/types'
+import MessageBoard from '@/components/common/MessageBoard.vue'
 
 const aboutInfo = ref<AboutInfo | null>(null)
 const loading = ref(true)
@@ -67,9 +68,6 @@ onMounted(async () => {
       <!-- 内心独白 -->
       <h2 class="section-subtitle">内心独白</h2>
       <p class="intro-text">{{ aboutInfo.intro }}</p>
-      <span class="message-btn">
-        <a href="http://www.yangqq.com/e/tool/gbook/?bid=1" target="_blank">留言</a>
-      </span>
       
       <!-- 心路历程 -->
       <template v-if="aboutInfo.experiences && aboutInfo.experiences.length > 0">
@@ -114,8 +112,12 @@ onMounted(async () => {
               <p>{{ contact.subtitle }}</p>
             </section>
           </li>
+</li>
         </ul>
-      </template> -->
+      </template>
+
+      <!-- 留言板 -->
+      <MessageBoard />
     </div>
     
     <!-- 加载中 -->

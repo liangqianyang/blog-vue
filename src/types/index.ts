@@ -162,6 +162,16 @@ export interface AboutInfo {
   contacts?: Contact[]
 }
 
+// 留言信息
+export interface Message {
+  id: number
+  content: string
+  nickname: string
+  avatar?: string
+  email?: string
+  createTime: string
+}
+
 // 公告
 export interface Announcement {
   id: number
