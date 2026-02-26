@@ -84,6 +84,7 @@ export const articleApi = {
     per_page?: number
     category_id?: number
     label_id?: number
+    with_top?: boolean
   }): Promise<{ list: Article[], total: number, page: number, lastPage: number }> {
     if (USE_MOCK) {
       const result = mockData.getArticles({ page: params?.page, pageSize: params?.per_page })
