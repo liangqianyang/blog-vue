@@ -20,7 +20,7 @@ const loadArticle = async () => {
   loading.value = true
   isLiked.value = false
   try {
-    const id = parseInt(route.params.id as string)
+    const id = route.params.id as string
     article.value = await articleApi.getDetail(id)
     relatedArticles.value = await articleApi.getRecommendList(4)
   } catch (error) {

@@ -36,7 +36,7 @@ if (import.meta.env.DEV) {
 
 // API 响应数据到前端 Article 类型的映射函数
 function mapArticleFromApi(item: {
-  id: number
+  id: number | string
   title: string
   summary: string
   content?: string
@@ -91,7 +91,7 @@ export const articleApi = {
     const { data } = await api.get('/articles/public/list', { params })
     if (data.code === 0 && data.data) {
       const articles = data.data.data.map((item: {
-        id: number
+        id: number | string
         title: string
         summary: string
         content?: string
@@ -114,9 +114,9 @@ export const articleApi = {
   },
 
   // 获取文章详情
-  async getDetail(id: number): Promise<Article> {
+  async getDetail(id: number | string): Promise<Article> {
     if (USE_MOCK) {
-      return mockData.getArticleById(id)
+      return mockData.getArticleById(typeof id === 'string' ? parseInt(id) : id)
     }
     const { data } = await api.get(`/articles/public/${id}`)
     if (data.code === 0 && data.data) {
@@ -155,7 +155,7 @@ export const articleApi = {
     })
     // 处理响应格式，转换为 SidebarArticle
     if (data.code === 0 && Array.isArray(data.data)) {
-      return data.data.map((item: { id: number; title: string; thumbnail?: string }) => ({
+      return data.data.map((item: { id: number | string; title: string; thumbnail?: string }) => ({
         id: item.id,
         title: item.title,
         cover: item.thumbnail
@@ -174,7 +174,7 @@ export const articleApi = {
     })
     // 处理响应格式，转换为 SidebarArticle
     if (data.code === 0 && Array.isArray(data.data)) {
-      return data.data.map((item: { id: number; title: string; thumbnail?: string }) => ({
+      return data.data.map((item: { id: number | string; title: string; thumbnail?: string }) => ({
         id: item.id,
         title: item.title,
         cover: item.thumbnail
@@ -197,7 +197,7 @@ export const articleApi = {
   },
 
   // 点赞文章
-  async like(id: number): Promise<{ likeCount: number }> {
+  async like(id: number | string): Promise<{ likeCount: number }> {
     const { data } = await api.post(`/articles/public/${id}/like`)
     if (data.code === 0) {
       return { likeCount: data.data?.like_count || 0 }
@@ -206,7 +206,7 @@ export const articleApi = {
   },
 
   // 取消点赞文章
-  async unlike(id: number): Promise<{ likeCount: number }> {
+  async unlike(id: number | string): Promise<{ likeCount: number }> {
     const { data } = await api.post(`/articles/public/${id}/unlike`)
     if (data.code === 0) {
       return { likeCount: data.data?.like_count || 0 }
@@ -388,7 +388,7 @@ export const searchApi = {
     const { data } = await api.get('/articles/search', { params })
     if (data.code === 0 && data.data) {
       const articles = data.data.items.map((item: {
-        id: number
+        id: number | string
         title: string
         summary: string
         content?: string

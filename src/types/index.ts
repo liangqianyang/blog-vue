@@ -13,7 +13,7 @@ export interface Author {
 
 // 文章
 export interface Article {
-  id: number
+  id: number | string
   title: string
   summary: string
   content?: string
@@ -28,11 +28,11 @@ export interface Article {
   commentCount?: number
   labels?: Tag[]
   prev?: {
-    id: number
+    id: number | string
     title: string
   }
   next?: {
-    id: number
+    id: number | string
     title: string
   }
 }
@@ -82,7 +82,7 @@ export interface PaginatedResponse<T> {
 
 // 侧边栏文章（简化版）
 export interface SidebarArticle {
-  id: number
+  id: number | string
   title: string
   cover?: string
 }
