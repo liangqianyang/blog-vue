@@ -18,7 +18,7 @@ const loadExperiences = async () => {
     
     // 转换为 Experience 类型
     return list.map(item => ({
-      id: item.id,
+      id: Number(item.id),
       title: item.title,
       summary: item.summary,
       cover: item.cover || '/images/default-cover.jpg',
