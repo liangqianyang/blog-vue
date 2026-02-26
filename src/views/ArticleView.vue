@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, watch } from 'vue'
+import { ref, onMounted, watch, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { articleApi } from '@/api'
 import type { Article, SidebarArticle } from '@/types'
@@ -11,6 +11,10 @@ const relatedArticles = ref<SidebarArticle[]>([])
 const loading = ref(true)
 const isLiked = ref(false)
 const liking = ref(false)
+
+const articleUrl = computed(() => {
+  return `${window.location.origin}/article/${article.value?.id}`
+})
 
 const loadArticle = async () => {
   loading.value = true
@@ -96,7 +100,7 @@ watch(() => route.params.id, () => {
         
         <!-- 分享 -->
         <div class="share-box">
-          本文链接：<a :href="`/article/${article.id}`">{{ `https://www.yangqq.com/article/${article.id}` }}</a>
+          本文链接：<a :href="`/article/${article.id}`">{{ articleUrl }}</a>
         </div>
         
         <!-- 点赞 -->
@@ -107,10 +111,12 @@ watch(() => route.params.id, () => {
         <!-- 上一篇/下一篇 -->
         <ul class="other-links">
           <li>
-            <router-link to="/article/1">上一篇：个人博客，属于我的小世界！</router-link>
+            <router-link v-if="article.prev" :to="`/article/${article.prev.id}`">上一篇：{{ article.prev.title }}</router-link>
+            <span v-else>上一篇：没有了</span>
           </li>
           <li>
-            <router-link to="/article/2">下一篇：安静地做一个爱设计的女子</router-link>
+            <router-link v-if="article.next" :to="`/article/${article.next.id}`">下一篇：{{ article.next.title }}</router-link>
+            <span v-else>下一篇：没有了</span>
           </li>
         </ul>
         

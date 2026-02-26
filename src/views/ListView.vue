@@ -3,7 +3,7 @@ import { ref, onMounted, watch, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useAppStore } from '@/stores'
 import { articleApi, tagApi, searchApi, categoryApi } from '@/api'
-import type { Article, Label, NavItem, Category } from '@/types'
+import type { Article, Label, NavItem } from '@/types'
 
 import BlogList from '@/components/home/BlogList.vue'
 import Pagination from '@/components/common/Pagination.vue'
@@ -214,10 +214,10 @@ watch(() => route.query.keyword, () => {
       <!-- 点击排行 -->
       <div class="white-bg ranking">
         <h2 class="section-title">点击排行</h2>
-        <div class="top-news img-scale">
-          <router-link to="/article/1">
-            <img src="/images/h1.jpg" alt="">
-            <span>6条网页设计配色原则,让你秒变配色高手</span>
+        <div class="top-news img-scale" v-if="articles.length > 0">
+          <router-link :to="`/article/${articles[0]?.id}`">
+            <img :src="articles[0]?.cover || '/images/h1.jpg'" :alt="articles[0]?.title">
+            <span>{{ articles[0]?.title }}</span>
           </router-link>
         </div>
         <ul>
@@ -231,10 +231,10 @@ watch(() => route.query.keyword, () => {
       <!-- 本栏推荐 -->
       <div class="white-bg recommend">
         <h2 class="section-title">本栏推荐</h2>
-        <div class="top-news img-scale">
-          <router-link to="/article/2">
-            <img src="/images/h2.jpg" alt="">
-            <span>6条网页设计配色原则,让你秒变配色高手</span>
+        <div class="top-news img-scale" v-if="articles.length > 1">
+          <router-link :to="`/article/${articles[1]?.id}`">
+            <img :src="articles[1]?.cover || '/images/h2.jpg'" :alt="articles[1]?.title">
+            <span>{{ articles[1]?.title }}</span>
           </router-link>
         </div>
         <ul>

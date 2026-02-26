@@ -137,7 +137,9 @@ export const articleApi = {
         labels: item.labels?.map((label: { id: number; title: string }) => ({
           id: label.id,
           name: label.title
-        }))
+        })),
+        prev: data.prev || item.prev,
+        next: data.next || item.next
       }
     }
     throw new Error('文章不存在')

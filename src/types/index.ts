@@ -27,6 +27,14 @@ export interface Article {
   likeCount?: number
   commentCount?: number
   labels?: Tag[]
+  prev?: {
+    id: number
+    title: string
+  }
+  next?: {
+    id: number
+    title: string
+  }
 }
 
 // 轮播图
