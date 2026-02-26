@@ -180,6 +180,29 @@ export interface Message {
   createTime: string
 }
 
+// 评论
+export interface Comment {
+  id: number
+  article_id?: number
+  content: string
+  nickname: string
+  email?: string | null
+  avatar?: string
+  parent_id: number
+  root_id?: number
+  reply_to_id: number
+  is_admin_reply?: boolean
+  status?: number
+  status_text?: string
+  reply_to?: {
+    id: number
+    nickname: string
+  }
+  replies?: Comment[]
+  created_at: string
+  updated_at?: string
+}
+
 // 公告
 export interface Announcement {
   id: number

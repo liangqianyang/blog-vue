@@ -12,7 +12,8 @@ import type {
   Announcement,
   NavItem,
   AboutMe,
-  Message
+  Message,
+  Comment
 } from '@/types'
 import { mockData } from './mock'
 
@@ -504,6 +505,42 @@ export const messageApi = {
       return res.data
     }
     throw new Error(res.message || '留言提交失败')
+  }
+}
+
+// 评论 API
+export const commentApi = {
+  // 获取文章评论列表（嵌套结构）
+  async getComments(articleId: number | string): Promise<Comment[]> {
+    if (USE_MOCK) {
+      return mockData.getComments(typeof articleId === 'string' ? parseInt(articleId) : articleId)
+    }
+    const { data } = await api.get(`/articles/${articleId}/comments`)
+    if (data.code === 0 && Array.isArray(data.data)) {
+      return data.data
+    }
+    return []
+  },
+
+  // 提交评论
+  async createComment(articleId: number | string, commentData: {
+    content: string
+    nickname: string
+    email?: string
+    parent_id?: number
+    reply_to_id?: number
+  }): Promise<Comment> {
+    if (USE_MOCK) {
+      return mockData.createComment(
+        typeof articleId === 'string' ? parseInt(articleId) : articleId,
+        commentData
+      )
+    }
+    const { data } = await api.post(`/articles/${articleId}/comments`, commentData)
+    if (data.code === 0) {
+      return data.data
+    }
+    throw new Error(data.message || '评论提交失败')
   }
 }
 

@@ -3,6 +3,7 @@ import { ref, onMounted, watch, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { articleApi } from '@/api'
 import type { Article, SidebarArticle } from '@/types'
+import CommentSection from '@/components/common/CommentSection.vue'
 
 const route = useRoute()
 
@@ -132,6 +133,9 @@ watch(() => route.params.id, () => {
             </li>
           </ul>
         </div>
+
+        <!-- 评论区 -->
+        <CommentSection :article-id="article.id" />
       </div>
       
       <!-- 加载中 -->

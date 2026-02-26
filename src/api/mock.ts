@@ -7,7 +7,8 @@ import type {
   Tag,
   BlogSite,
   AboutInfo,
-  Message
+  Message,
+  Comment
 } from '@/types'
 
 // 默认作者
@@ -383,7 +384,141 @@ export const mockData = {
     }
     messages.unshift(newMessage)
     return newMessage
+  },
+
+  // 获取文章评论列表
+  getComments(articleId: number): Comment[] {
+    return comments[articleId] || []
+  },
+
+  // 提交评论
+  createComment(articleId: number, data: {
+    content: string
+    nickname: string
+    email?: string
+    parent_id?: number
+    reply_to_id?: number
+  }): Comment {
+    commentIdCounter++
+    const newComment: Comment = {
+      id: commentIdCounter,
+      content: data.content,
+      nickname: data.nickname,
+      email: data.email,
+      avatar: `https://api.dicebear.com/9.x/adventurer-neutral/svg?seed=${encodeURIComponent(data.nickname)}`,
+      parent_id: data.parent_id || 0,
+      reply_to_id: data.reply_to_id || 0,
+      root_id: data.parent_id || 0,
+      is_admin_reply: false,
+      created_at: new Date().toLocaleString()
+    }
+
+    if (!comments[articleId]) {
+      comments[articleId] = []
+    }
+
+    if (data.parent_id) {
+      // 找到根评论并添加到其 replies
+      for (const comment of comments[articleId]) {
+        if (comment.id === data.parent_id) {
+          if (!comment.replies) comment.replies = []
+          // 查找被回复人的昵称，设置 reply_to
+          if (data.reply_to_id) {
+            const findNickname = (id: number): string | undefined => {
+              if (comment.id === id) return comment.nickname
+              for (const r of (comment.replies || [])) {
+                if (r.id === id) return r.nickname
+              }
+              return undefined
+            }
+            const nickname = findNickname(data.reply_to_id)
+            if (nickname) {
+              newComment.reply_to = { id: data.reply_to_id, nickname }
+            }
+          }
+          comment.replies.push(newComment)
+          break
+        }
+      }
+    } else {
+      newComment.replies = []
+      comments[articleId].unshift(newComment)
+    }
+
+    return newComment
   }
 }
 
-export { categories, articles, banners, tags, blogSites, aboutInfo, messages }
+// 评论数据
+const comments: Record<number, Comment[]> = {
+  1: [
+    {
+      id: 1,
+      content: '非常棒的文章，写得很有深度！',
+      nickname: '前端小白',
+      email: 'xiaobai@example.com',
+      avatar: 'https://api.dicebear.com/9.x/adventurer-neutral/svg?seed=前端小白',
+      parent_id: 0,
+      reply_to_id: 0,
+      root_id: 0,
+      is_admin_reply: false,
+      created_at: '2025-12-20 14:30:00',
+      replies: [
+        {
+          id: 3,
+          content: '我也觉得这篇文章写得很好，收藏了！',
+          nickname: '路过的读者',
+          avatar: 'https://api.dicebear.com/9.x/adventurer-neutral/svg?seed=路过的读者',
+          parent_id: 1,
+          reply_to_id: 1,
+          root_id: 1,
+          reply_to: { id: 1, nickname: '前端小白' },
+          is_admin_reply: false,
+          created_at: '2025-12-21 10:15:00'
+        },
+        {
+          id: 5,
+          content: '同感，博主加油！',
+          nickname: '技术爱好者',
+          avatar: 'https://api.dicebear.com/9.x/adventurer-neutral/svg?seed=技术爱好者',
+          parent_id: 1,
+          reply_to_id: 3,
+          root_id: 1,
+          reply_to: { id: 3, nickname: '路过的读者' },
+          is_admin_reply: false,
+          created_at: '2025-12-22 08:30:00'
+        }
+      ]
+    },
+    {
+      id: 2,
+      content: '请问这个模板可以下载吗？想用来搭建自己的博客。',
+      nickname: '求知者',
+      email: 'qiuzhi@example.com',
+      avatar: 'https://api.dicebear.com/9.x/adventurer-neutral/svg?seed=求知者',
+      parent_id: 0,
+      reply_to_id: 0,
+      root_id: 0,
+      is_admin_reply: false,
+      created_at: '2025-12-20 16:45:00',
+      replies: [
+        {
+          id: 4,
+          content: '可以的，关注公众号获取下载链接哦~',
+          nickname: '站长',
+          avatar: 'https://api.dicebear.com/9.x/adventurer-neutral/svg?seed=站长',
+          parent_id: 2,
+          reply_to_id: 2,
+          root_id: 2,
+          reply_to: { id: 2, nickname: '求知者' },
+          is_admin_reply: true,
+          created_at: '2025-12-21 09:00:00'
+        }
+      ]
+    }
+  ]
+}
+
+let commentIdCounter = 10
+
+export { categories, articles, banners, tags, blogSites, aboutInfo, messages, comments }
