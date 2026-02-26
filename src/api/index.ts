@@ -473,14 +473,22 @@ export const messageApi = {
     if (USE_MOCK) {
       return mockData.getMessages(params)
     }
-    const { data } = await api.get('/messages/public', { params })
-    // 如果后端返回结构不同，这里可能需要适配
+    const { data } = await api.get('/messages/public/list', { params })
     if (data.code === 0 && data.data) {
+       const list = data.data.data.map((item: any) => ({
+         id: item.id,
+         content: item.content,
+         nickname: item.nickname,
+         avatar: item.avatar || '/images/default-avatar.jpg',
+         createTime: item.created_at || item.createTime,
+         email: item.email
+       }))
+       
        return {
-         list: data.data.data,
-         total: data.data.meta.total,
-         page: data.data.meta.current_page,
-         pageSize: data.data.meta.per_page
+         list: list,
+         total: data.data.total,
+         page: data.data.current_page,
+         pageSize: data.data.per_page
        }
     }
     return { list: [], total: 0, page: 1, pageSize: 10 }
@@ -491,7 +499,7 @@ export const messageApi = {
     if (USE_MOCK) {
       return mockData.createMessage(data)
     }
-    const { data: res } = await api.post('/messages/public', data)
+    const { data: res } = await api.post('/messages/public/submit', data)
     if (res.code === 0) {
       return res.data
     }
