@@ -251,7 +251,7 @@ watch(() => route.query.keyword, () => {
       
       <!-- 广告 -->
       <div class="white-bg ad img-scale">
-        <a href="/"><img src="/images/ad.jpg" alt="广告"></a>
+        <a href="/"><img src="/images/ad.png" alt="广告"></a>
       </div>
       
       <!-- 标签云 -->

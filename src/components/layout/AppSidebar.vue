@@ -156,7 +156,7 @@ onMounted(async () => {
     <!-- 广告位 -->
     <div class="white-bg ad img-scale">
       <a href="/">
-        <img src="/images/ad.jpg" alt="广告">
+        <img src="/images/ad.png" alt="广告">
       </a>
     </div>
 

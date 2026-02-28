@@ -148,7 +148,7 @@ watch(() => route.params.id, () => {
     <aside class="sidebar-wrapper">
       <!-- 广告 -->
       <div class="white-bg ad">
-        <img src="/images/ad.jpg" alt="广告">
+        <img src="/images/ad.png" alt="广告">
       </div>
       
       <!-- 猜你喜欢 -->
