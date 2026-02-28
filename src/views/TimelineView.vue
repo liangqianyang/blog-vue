@@ -1,46 +1,25 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { articleApi } from '@/api'
-import type { Article } from '@/types'
 
-import Pagination from '@/components/common/Pagination.vue'
+interface TimelineItem {
+  id: string
+  title: string
+  date: string
+}
 
-const articles = ref<Article[]>([])
+const articles = ref<TimelineItem[]>([])
 const loading = ref(true)
-const currentPage = ref(1)
-const totalPages = ref(1)
-const total = ref(0)
-const perPage = 20
 
 const loadArticles = async () => {
   loading.value = true
   try {
-    const data = await articleApi.getPublicList({
-      page: currentPage.value,
-      per_page: perPage,
-      with_top: false
-    })
-
-    articles.value = data.list
-    total.value = data.total
-    totalPages.value = data.lastPage
+    articles.value = await articleApi.getTimeline()
   } catch (error) {
-    console.error('Failed to load articles:', error)
+    console.error('Failed to load timeline:', error)
   } finally {
     loading.value = false
   }
-}
-
-// 格式化日期：只取 yyyy-MM-dd 部分
-const formatDate = (dateStr: string) => {
-  if (!dateStr) return ''
-  return dateStr.substring(0, 10)
-}
-
-const handlePageChange = (page: number) => {
-  currentPage.value = page
-  loadArticles()
-  window.scrollTo({ top: 0, behavior: 'smooth' })
 }
 
 onMounted(() => {
@@ -56,22 +35,13 @@ onMounted(() => {
       <div v-if="loading" class="timeline-loading">加载中...</div>
       <ul v-else-if="articles.length">
         <li v-for="article in articles" :key="article.id">
-          <span>{{ formatDate(article.createTime) }}</span>
+          <span>{{ article.date }}</span>
           <i>
             <router-link :to="`/article/${article.id}`">{{ article.title }}</router-link>
           </i>
         </li>
       </ul>
       <div v-else class="timeline-empty">暂无文章</div>
-
-      <!-- 分页 -->
-      <Pagination
-        v-if="totalPages > 1"
-        :current-page="currentPage"
-        :total-pages="totalPages"
-        :total="total"
-        @update:current-page="handlePageChange"
-      />
     </div>
   </article>
 </template>

@@ -185,6 +185,22 @@ export const articleApi = {
     return []
   },
 
+  // 获取时间轴文章列表
+  async getTimeline(): Promise<{ id: string; title: string; date: string }[]> {
+    if (USE_MOCK) {
+      return mockData.getArticles({ pageSize: 50 }).list.map(a => ({
+        id: String(a.id),
+        title: a.title,
+        date: a.createTime
+      }))
+    }
+    const { data } = await api.get('/articles/public/timeline')
+    if (data.code === 0 && Array.isArray(data.data)) {
+      return data.data
+    }
+    return []
+  },
+
   // 获取头条文章（按浏览量排序）
   async getTopRanked(params: { limit?: number, order_by?: string, category_id?: number, label_id?: number } = {}): Promise<Article[]> {
     if (USE_MOCK) {
