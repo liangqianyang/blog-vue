@@ -420,7 +420,12 @@ export const searchApi = {
         view_count?: number
         _highlight?: { title?: string[]; summary?: string[] }
       }) => {
-        const article = mapArticleFromApi(item)
+        const article = mapArticleFromApi({
+          ...item,
+          category: item.category_id || item.category_name
+            ? { id: item.category_id || 0, name: item.category_name || '' }
+            : undefined
+        })
         // 处理高亮
         if (item._highlight) {
           if (item._highlight.title) {
