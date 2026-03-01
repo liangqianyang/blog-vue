@@ -59,7 +59,7 @@ onMounted(async () => {
       
       <!-- 广告位 -->
       <div class="ad white-bg">
-        <img src="https://oss.lqy-comic.com/images/202602281703503172d55173fd42c4_watermark.png-ad2" alt="广告">
+        <img src="http://oss.lqy-comic.com/images/longad2.png-longad2860" alt="广告">
       </div>
       
       <!-- 最新博文 -->
