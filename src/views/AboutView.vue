@@ -63,6 +63,7 @@ onMounted(async () => {
         <h3>{{ aboutInfo.name }}</h3>
         <p>{{ aboutInfo.title }}</p>
         <p>{{ aboutInfo.description }}</p>
+        <router-link to="/resume" class="resume-link">查看个人简历</router-link>
       </div>
       
       <!-- 内心独白 -->
@@ -161,6 +162,23 @@ onMounted(async () => {
   p {
     color: $text-secondary;
     margin-bottom: 5px;
+  }
+
+  .resume-link {
+    display: inline-block;
+    margin-top: 8px;
+    padding: 5px 16px;
+    font-size: $font-size-sm;
+    color: $primary;
+    border: 1px solid $primary;
+    border-radius: 15px;
+    text-decoration: none;
+    transition: $transition-base;
+
+    &:hover {
+      background: $primary;
+      color: #fff;
+    }
   }
 }
 

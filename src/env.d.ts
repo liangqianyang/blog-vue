@@ -14,3 +14,13 @@ interface ImportMetaEnv {
 interface ImportMeta {
   readonly env: ImportMetaEnv
 }
+
+export {}
+
+// 扩展 vue-router 的 RouteMeta 类型
+declare module 'vue-router' {
+  interface RouteMeta {
+    hideInNav?: boolean
+    hideLayout?: boolean
+  }
+}

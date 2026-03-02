@@ -1,8 +1,12 @@
 <script setup lang="ts">
-import { onMounted, onUnmounted } from 'vue'
+import { computed, onMounted, onUnmounted } from 'vue'
+import { useRoute } from 'vue-router'
 import AppHeader from '@/components/layout/AppHeader.vue'
 import AppFooter from '@/components/layout/AppFooter.vue'
 import BackToTop from '@/components/common/BackToTop.vue'
+
+const route = useRoute()
+const hideLayout = computed(() => route.meta.hideLayout === true)
 
 // 禁止复制
 const preventCopy = (e: Event) => {
@@ -30,7 +34,7 @@ onUnmounted(() => {
 
 <template>
   <div id="app">
-    <AppHeader />
+    <AppHeader v-if="!hideLayout" />
     
     <main class="main-wrapper">
       <router-view v-slot="{ Component }">
@@ -40,7 +44,7 @@ onUnmounted(() => {
       </router-view>
     </main>
     
-    <AppFooter />
+    <AppFooter v-if="!hideLayout" />
     <BackToTop />
   </div>
 </template>
