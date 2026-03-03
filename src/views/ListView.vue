@@ -61,9 +61,18 @@ const currentNav = computed(() => {
   return findItem(appStore.navItems)
 })
 
+const currentLabel = computed(() => {
+  if (!route.query.label_id) return undefined
+  const id = Number(route.query.label_id)
+  return labels.value.find(l => l.id === id)
+})
+
 const categoryName = computed(() => {
   if (route.query.keyword) {
     return `搜索结果: "${route.query.keyword}"`
+  }
+  if (route.query.label_id) {
+    return currentLabel.value ? `标签: ${currentLabel.value.title}` : '文章列表'
   }
   return currentNav.value?.name || '文章列表'
 })
@@ -71,6 +80,9 @@ const categoryName = computed(() => {
 const categoryDesc = computed(() => {
   if (route.query.keyword) {
     return `共找到 ${total.value} 篇关于 "${route.query.keyword}" 的文章`
+  }
+  if (route.query.label_id) {
+    return `共找到 ${total.value} 篇相关文章`
   }
   return currentNav.value?.description || '暂无简介'
 })
@@ -90,6 +102,7 @@ const loadArticles = async () => {
   try {
     const categorySlug = route.params.category as string
     const keyword = route.query.keyword as string
+    const labelId = route.query.label_id ? Number(route.query.label_id) : undefined
     
     let data;
     if (keyword) {
@@ -141,6 +154,7 @@ const loadArticles = async () => {
       // 调用公开文章列表接口
       data = await articleApi.getPublicList({
         category_id: categoryId,
+        label_id: labelId,
         page: currentPage.value,
         per_page: pageSize
       })
@@ -181,6 +195,11 @@ watch(() => route.params.category, () => {
 })
 
 watch(() => route.query.keyword, () => {
+  currentPage.value = 1
+  loadArticles()
+})
+
+watch(() => route.query.label_id, () => {
   currentPage.value = 1
   loadArticles()
 })
