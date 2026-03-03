@@ -6,8 +6,8 @@ const showContact = ref(false)
 const info = {
   name: '梁前扬',
   title: '高级后端开发工程师（PHP / Golang）',
-  tags: ['8年全栈开发经验', '📍 安徽·合肥', '本科', '全职'],
-  summary: '8年全栈开发经验，精通PHP、Golang，熟悉Java。擅长高并发、分布式系统设计与优化，主导过大型ERP系统、SaaS商城、微信小程序等项目，具备从0到1的完整系统搭建能力。熟练运用MySQL调优、Redis缓存、Kafka消息队列、Elasticsearch等技术；熟悉Docker/K8s容器化部署；拥有丰富的微服务架构经验（Go-Zero），擅长前后端分离开发（Vue + ElementUI）。具备较强的技术攻关能力与团队协作经验，适应快速迭代的互联网开发环境。',
+  tags: ['9年开发经验', '📍 安徽·合肥', '本科', '全职'],
+  summary: '9年互联网全栈开发经验，精通PHP，熟练掌握Golang，了解Java。擅长高并发系统设计与性能优化，主导过大型ERP系统、SaaS商城、微服务架构落地等多类核心项目，具备从0到1的完整系统搭建与团队管理能力。深度实践MySQL调优、Redis缓存策略、Kafka消息队列、Elasticsearch搜索引擎等中间件技术；熟悉Docker/K8s容器化部署与CI/CD流程；拥有丰富的Go-Zero微服务架构经验及Vue前后端分离开发经验。具备优秀的技术攻关能力与跨团队协作经验，适应快速迭代的互联网研发节奏。',
   contact: {
     phone: '18155371631',
     email: '543492227@qq.com',
@@ -17,14 +17,14 @@ const info = {
 }
 
 const skills = [
-  { name: 'PHP', level: 92, tag: '精通' },
-  { name: 'Golang', level: 86, tag: '熟练' },
-  { name: 'MySQL / Redis', level: 90, tag: '熟练' },
-  { name: 'Go-Zero 微服务', level: 83, tag: '熟练' },
-  { name: 'Kafka / 消息队列', level: 80, tag: '熟练' },
-  { name: 'Vue.js / HTML / CSS', level: 82, tag: '熟练' },
-  { name: 'Docker / K8s / Linux', level: 74, tag: '了解' },
-  { name: 'Java / Spring MVC', level: 65, tag: '了解' }
+  { name: 'PHP', level: 92, tag: '精通', desc: 'ThinkPHP / Laravel / Yii，8年+深度使用' },
+  { name: 'Golang', level: 86, tag: '熟练', desc: 'Go-Zero微服务架构，3年+项目经验' },
+  { name: 'MySQL / Redis', level: 90, tag: '熟练', desc: '慢查询优化、索引设计、缓存策略' },
+  { name: 'Go-Zero 微服务', level: 83, tag: '熟练', desc: '服务拆分、RPC通信、服务治理' },
+  { name: 'Kafka / MQ', level: 80, tag: '熟练', desc: '异步解耦、削峰填谷、消息可靠投递' },
+  { name: 'Vue / 前端', level: 82, tag: '熟练', desc: 'Vue + ElementUI，前后端分离开发' },
+  { name: 'Docker / K8s / Linux', level: 74, tag: '了解', desc: '容器化部署、集群编排、CI/CD' },
+  { name: 'Java / Spring', level: 65, tag: '了解', desc: 'Spring MVC / Hibernate，有项目经验' }
 ]
 
 const experiences = [
@@ -32,6 +32,7 @@ const experiences = [
     period: '2025.05 - 至今',
     company: '合肥元算点安全技术服务有限公司',
     role: '技术组长 · PHP',
+    industry: '在线教育',
     description: '担任技术组长，全面负责团队日常开发管理及系统稳定运营，主导在线教育业务系统的迭代优化与技术攻关。',
     highlights: [
       '主持月度需求评审与技术方案设计，合理分配开发任务，确保版本按时高质量上线',
@@ -45,6 +46,7 @@ const experiences = [
     period: '2021.11 - 2025.05',
     company: '云汉芯城（上海）互联网科技股份有限公司',
     role: 'Golang 后端开发工程师',
+    industry: '电子/半导体 · 500-1000人',
     description: '主要承担核心ERP系统（云策）及SaaS商城（芯晶采）的后端研发，以Golang重构关键业务模块，深度参与微服务架构落地。',
     highlights: [
       '主导ERP销售模块Golang重构，引入索引优化与缓存策略，慢查询减少30%，QPS提升35%',
@@ -57,6 +59,7 @@ const experiences = [
     period: '2020.07 - 2021.07',
     company: '上海远播教育科技集团股份有限公司',
     role: 'PHP 后端开发工程师',
+    industry: '教育培训 · 已上市',
     description: '负责教育培训事业部学习中心ERP系统的功能迭代与维护，系统覆盖学生、财务、排课、教学等多个核心业务模块。',
     highlights: [
       '基于Laravel 5.5 + PolarDB + Redis + Kafka 构建高可用ERP系统',
@@ -68,6 +71,7 @@ const experiences = [
     period: '2019.05 - 2020.07',
     company: '上海熠升网络科技有限公司',
     role: 'PHP 开发工程师',
+    industry: '电商',
     description: '独立负责百步生活电商平台的全栈迭代开发与系统维护，覆盖PC端、移动端及微信公众号多端场景。',
     highlights: [
       '重构遗留订单模块数据库结构，优化慢查询15+项，API响应时间从800ms降至200ms，系统稳定性提升30%',
@@ -78,40 +82,162 @@ const experiences = [
   {
     period: '2018.05 - 2019.05',
     company: '上海榕智市场营销策划股份有限公司',
-    role: 'IT 技术支持 / PHP 开发',
+    role: 'PHP 开发工程师',
+    industry: '广告营销 · 已上市',
     description: '主导微信生态开发矩阵建设，服务兰芝、青岛啤酒等多个品牌客户的差异化运营需求。',
     highlights: [
       '基于OAuth2.0构建多公众号统一授权中心，日均处理用户授权请求10万+',
       '开发微信卡券核销自动化系统（OCR识别），卡券核销率提升37%，人工审核成本降低60%',
       '封装H5营销组件库（抽奖/预约/裂变分享），复用率达85%，平均活动开发周期缩短40%'
     ]
+  },
+  {
+    period: '2017.09 - 2018.05',
+    company: '上海美橙科技信息发展有限公司',
+    role: 'PHP 开发工程师',
+    industry: '互联网 · 500-1000人',
+    description: '独立评估项目需求、设计数据库架构并完成企业官网、微信商城等多类项目的全栈开发交付。',
+    highlights: [
+      '独立完成企业官网、微信商城、民宿定制开发等多类项目全流程交付',
+      '参与客户需求沟通与项目评估，积累微信生态开发与数据库设计实战经验',
+      '开发社体连线平台（多角色体系 + 多支付渠道 + 财务报表）'
+    ]
+  },
+  {
+    period: '2016.03 - 2017.06',
+    company: '上海雅宽信息科技有限公司',
+    role: '软件工程师',
+    industry: '软件服务',
+    description: '参与多个企业级系统开发，涉及Java、C#、PHP多语言技术栈，积累扎实工程实践经验。',
+    highlights: [
+      '参与厦门航空掌上乘务系统开发（C# + Oracle），服务于乘务部门日常管理',
+      '独立负责东城渠道销售系统开发（Java + MiniUI + Oracle），管理经销商与分销商业务',
+      '参与浦东新区企业家创新领导力平台（Java + Hibernate + Oracle）'
+    ]
   }
 ]
 
-const projects = [
+const coreProjects = [
   {
     name: '芯晶采 SaaS 商城系统',
+    period: '2024.08 - 2025.05',
+    company: '云汉芯城',
     tag: '核心项目',
+    role: '后端核心开发',
     tech: 'Golang · Go-Zero · Kafka · Redis · MySQL',
-    description: '定制化B2B电商SaaS平台，支持月均5万+订单处理。主导订单模块与授信额度模块的设计与实现，基于Kafka实现异步消息解耦，系统吞吐量大幅提升，核心链路响应时间≤200ms。'
+    highlights: [
+      '定制化B2B电商SaaS平台，为大客户提供精准物料推荐与替代方案',
+      '主导订单模块与授信额度模块架构设计，支撑月均5万+订单处理',
+      '基于Kafka实现异步消息解耦，核心链路响应时间≤200ms',
+      '设计订单状态机，保障复杂业务流转的数据一致性'
+    ]
   },
   {
     name: '云策 ERP 系统',
+    period: '2021.11 - 2025.05',
+    company: '云汉芯城',
     tag: '长期维护',
+    role: '销售模块负责人',
     tech: 'PHP · Golang · Go-Zero · Kafka · Redis · Yii',
-    description: '云汉芯城内部大型ERP平台，覆盖销售、会员、物流、资金流等全业务域。担任销售模块负责人，完成Golang核心重构，慢查询减少30%，QPS提升35%，推动微服务架构（Go-Zero）落地。'
+    highlights: [
+      '覆盖销售、会员、物流、资金流等全业务域的大型ERP平台',
+      '完成Golang核心重构，慢查询减少30%，QPS提升35%',
+      '推动微服务架构（Go-Zero）落地，负责系统异常巡检与需求迭代',
+      '逐步梳理Legacy代码，制定重构计划并稳步推进'
+    ]
   },
   {
-    name: '在线100分教育系统',
+    name: '在线100分教育平台',
+    period: '2025.05 - 至今',
+    company: '合肥元算点',
     tag: '团队管理',
+    role: '技术组长',
     tech: 'PHP · MySQL · Redis',
-    description: '在线教育SaaS平台（zaixian100f.com），担任技术组长。统筹需求评审与开发计划，主导日志系统建设与日常Bug治理，有效保障平台稳定运行，技术债务显著降低。'
+    highlights: [
+      '在线教育SaaS平台，担任技术组长统筹团队开发管理',
+      '主导日志系统与数据中心建设，搭建开放平台支撑第三方数据对接',
+      '实现异常实时监控与告警，系统故障响应效率大幅提升',
+      '系统化治理技术债务，平台稳定性显著提升'
+    ]
   },
   {
     name: '自营备货管理系统',
+    period: '2023.06 - 2023.08',
+    company: '云汉芯城',
     tag: '从0到1',
+    role: '项目负责人',
     tech: 'Golang · Go-Zero · Kafka · Redis · MySQL',
-    description: '基于大数据驱动的智能备货平台，自动推送待备货型号，辅助采购人员高效决策。涵盖备货计划、询价、参考信息等核心模块，作为项目负责人协调产品/测试/研发各方资源，按期高质量交付。'
+    highlights: [
+      '基于大数据驱动的智能备货平台，自动推送待备货型号',
+      '涵盖备货计划、询价、参考信息等核心模块',
+      '作为项目负责人协调产品/测试/研发资源，按期高质量交付',
+      '借助历史数据构建智能推荐，提升备货准确率'
+    ]
+  },
+  {
+    name: '学习中心 ERP 系统',
+    period: '2020.07 - 2021.07',
+    company: '远播教育',
+    tag: '核心项目',
+    role: '后端核心开发',
+    tech: 'PHP · Laravel · PolarDB · Redis · Kafka',
+    highlights: [
+      '教育培训ERP系统，覆盖学生管理、财务、排课、教学等模块',
+      '独立完成PC端后台 + 家长端/教师端移动端核心功能',
+      '对接微信推送实现上课提醒与课堂反馈通知',
+      '系统分PC端与手机端，家长端支持课程表、评价、考试信息查看'
+    ]
+  }
+]
+
+const otherProjects = [
+  {
+    name: '百步生活商城',
+    period: '2019.05 - 2020.07',
+    tech: 'PHP · ECMall · MySQL · Redis · 阿里OSS',
+    description: '电商系统，覆盖PC/移动/公众号多端。重构订单模块，优化慢查询15+项，API响应800ms→200ms，引入OSS加速并发提升2倍。'
+  },
+  {
+    name: 'H5营销开发矩阵',
+    period: '2018.05 - 2019.05',
+    tech: 'PHP · ThinkPHP · MySQL · Redis · 微信API',
+    description: '服务兰芝、青岛啤酒等品牌客户，封装H5营销组件库（抽奖/预约/裂变），复用率85%，开发周期缩短40%。'
+  },
+  {
+    name: '社体连线平台',
+    period: '2017.09 - 2018.03',
+    tech: 'PHP · ThinkPHP · MySQL · Redis · 支付宝/微信支付',
+    description: '体育赛事信息综合平台，含四角色体系，集成多种支付渠道与财务报表系统。'
+  },
+  {
+    name: '国健医疗微信商城',
+    period: '2018.02 - 2018.03',
+    tech: 'PHP · ThinkPHP · SQL Server · 微信支付',
+    description: '医疗器械微信商城，对接药神系统数据库获取商品，实现公众号自动登录与微信支付。'
+  },
+  {
+    name: '兴趣班小程序 + 公众号',
+    period: '2018.03 - 2018.05',
+    tech: 'PHP · ThinkPHP · MySQL · 微信小程序',
+    description: '与兴趣班App数据对接，实现找老师、找机构、附近搜索、课程购买等核心功能。'
+  },
+  {
+    name: '厦门航空掌上乘务系统',
+    period: '2016.10 - 2017.03',
+    tech: 'C# · Oracle · Visual Studio',
+    description: '服务厦门航空乘务部门，涵盖百分制信息、航班准备、网上考试等功能模块。'
+  },
+  {
+    name: '东城渠道销售系统',
+    period: '2016.06 - 2016.10',
+    tech: 'Java · MiniUI · Oracle',
+    description: '经销商与分销商关系管理，含下单管理、订单统计、返利计算及多维报表。'
+  },
+  {
+    name: '供应链管理系统',
+    period: '2016.03 - 2016.06',
+    tech: 'Java · Spring MVC · Hibernate · Oracle',
+    description: '供应链信息化服务系统，负责系统管理、供应商信息、商户品牌与类别管理等模块。'
   }
 ]
 
@@ -169,6 +295,7 @@ const education = {
             <div class="skill-bar">
               <div class="skill-fill" :style="{ width: skill.level + '%' }"></div>
             </div>
+            <p class="skill-desc">{{ skill.desc }}</p>
           </div>
         </div>
       </section>
@@ -181,7 +308,10 @@ const education = {
             <div class="timeline-dot"></div>
             <div class="timeline-content">
               <div class="exp-header">
-                <h3>{{ exp.role }}</h3>
+                <div class="exp-title-row">
+                  <h3>{{ exp.role }}</h3>
+                  <span class="industry-tag" v-if="exp.industry">{{ exp.industry }}</span>
+                </div>
                 <span class="period">{{ exp.period }}</span>
               </div>
               <p class="company">{{ exp.company }}</p>
@@ -194,17 +324,40 @@ const education = {
         </div>
       </section>
 
-      <!-- 项目经验 -->
+      <!-- 核心项目经验 -->
       <section class="resume-section">
-        <h2 class="section-title"><i class="icon">🚀</i> 项目经验</h2>
-        <div class="projects-grid">
-          <div class="project-card" v-for="(proj, i) in projects" :key="i">
+        <h2 class="section-title"><i class="icon">🚀</i> 核心项目经验</h2>
+        <div class="core-projects">
+          <div class="core-project-card" v-for="(proj, i) in coreProjects" :key="i">
             <div class="proj-header">
-              <h3>{{ proj.name }}</h3>
-              <span class="proj-tag">{{ proj.tag }}</span>
+              <div class="proj-title-row">
+                <h3>{{ proj.name }}</h3>
+                <span class="proj-tag core">{{ proj.tag }}</span>
+              </div>
+              <span class="proj-period">{{ proj.period }} · {{ proj.company }}</span>
             </div>
-            <span class="tech-stack">{{ proj.tech }}</span>
-            <p>{{ proj.description }}</p>
+            <div class="proj-meta">
+              <span class="proj-role">👤 {{ proj.role }}</span>
+              <span class="tech-stack">⚙️ {{ proj.tech }}</span>
+            </div>
+            <ul class="proj-highlights">
+              <li v-for="(h, j) in proj.highlights" :key="j">{{ h }}</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- 其他项目经验 -->
+      <section class="resume-section">
+        <h2 class="section-title"><i class="icon">📂</i> 其他项目经验</h2>
+        <div class="other-projects">
+          <div class="other-project-item" v-for="(proj, i) in otherProjects" :key="i">
+            <div class="other-proj-header">
+              <h4>{{ proj.name }}</h4>
+              <span class="other-proj-period">{{ proj.period }}</span>
+            </div>
+            <span class="other-tech-stack">{{ proj.tech }}</span>
+            <p class="other-proj-desc">{{ proj.description }}</p>
           </div>
         </div>
       </section>
@@ -425,6 +578,12 @@ const education = {
   transition: width 1s ease;
 }
 
+.skill-desc {
+  font-size: 12px;
+  color: $text-muted;
+  margin-top: 4px;
+}
+
 // Timeline
 .timeline {
   position: relative;
@@ -476,7 +635,7 @@ const education = {
 .exp-header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   flex-wrap: wrap;
   gap: 8px;
   margin-bottom: 4px;
@@ -486,6 +645,22 @@ const education = {
     color: $text-primary;
     font-weight: 600;
   }
+}
+
+.exp-title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.industry-tag {
+  font-size: 11px;
+  color: $text-muted;
+  background: rgba($text-muted, 0.1);
+  padding: 2px 8px;
+  border-radius: 8px;
+  white-space: nowrap;
 }
 
 .period {
@@ -526,60 +701,144 @@ const education = {
   }
 }
 
-// Projects
-.projects-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+// Core Projects
+.core-projects {
+  display: flex;
+  flex-direction: column;
   gap: 20px;
 }
 
-.project-card {
+.core-project-card {
   border: 1px solid $border-color;
   border-radius: $radius-md;
-  padding: 22px;
+  padding: 22px 24px;
   transition: $transition-base;
+  border-left: 3px solid $primary;
 
   &:hover {
-    border-color: $primary;
     box-shadow: $shadow-md;
-    transform: translateY(-2px);
+    transform: translateY(-1px);
   }
 
   .proj-header {
     display: flex;
     justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+
+  .proj-title-row {
+    display: flex;
     align-items: center;
     gap: 8px;
-    margin-bottom: 8px;
 
     h3 {
       font-size: 16px;
       color: $text-primary;
       font-weight: 600;
     }
+  }
 
-    .proj-tag {
-      font-size: 11px;
-      background: rgba($primary, 0.1);
-      color: $primary;
-      padding: 2px 8px;
-      border-radius: 8px;
-      white-space: nowrap;
-    }
+  .proj-tag.core {
+    font-size: 11px;
+    background: rgba($primary, 0.1);
+    color: $primary;
+    padding: 2px 8px;
+    border-radius: 8px;
+    white-space: nowrap;
+  }
+
+  .proj-period {
+    font-size: 12px;
+    color: $text-muted;
+  }
+
+  .proj-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+
+  .proj-role {
+    font-size: 12px;
+    color: $primary-dark;
+    font-weight: 500;
   }
 
   .tech-stack {
-    display: inline-block;
     font-size: 12px;
     color: $primary;
-    background: rgba($primary, 0.08);
-    padding: 2px 10px;
-    border-radius: 10px;
-    margin-bottom: 10px;
   }
 
-  p {
-    font-size: 13px;
+  .proj-highlights {
+    padding-left: 18px;
+
+    li {
+      font-size: 13px;
+      color: $text-secondary;
+      line-height: 1.8;
+      list-style: disc;
+
+      &::marker {
+        color: $primary;
+      }
+    }
+  }
+}
+
+// Other Projects
+.other-projects {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.other-project-item {
+  border: 1px solid $border-color;
+  border-radius: $radius-md;
+  padding: 16px 20px;
+  transition: $transition-base;
+
+  &:hover {
+    border-color: rgba($primary, 0.3);
+    box-shadow: $shadow-sm;
+  }
+
+  .other-proj-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+
+    h4 {
+      font-size: 14px;
+      color: $text-primary;
+      font-weight: 600;
+    }
+  }
+
+  .other-proj-period {
+    font-size: 11px;
+    color: $text-muted;
+    white-space: nowrap;
+  }
+
+  .other-tech-stack {
+    display: inline-block;
+    font-size: 11px;
+    color: $primary;
+    background: rgba($primary, 0.06);
+    padding: 2px 8px;
+    border-radius: 8px;
+    margin-bottom: 8px;
+  }
+
+  .other-proj-desc {
+    font-size: 12px;
     color: $text-secondary;
     line-height: 1.7;
   }
@@ -678,8 +937,12 @@ const education = {
     align-items: flex-start;
   }
 
-  .projects-grid {
+  .other-projects {
     grid-template-columns: 1fr;
+  }
+
+  .core-project-card .proj-header {
+    flex-direction: column;
   }
 }
 </style>
