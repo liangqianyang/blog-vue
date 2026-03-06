@@ -4,8 +4,10 @@ import { useRoute } from 'vue-router'
 import { articleApi } from '@/api'
 import type { Article, SidebarArticle } from '@/types'
 import CommentSection from '@/components/common/CommentSection.vue'
+import { useSeo } from '@/composables/useSeo'
 
 const route = useRoute()
+const { setSeo } = useSeo()
 
 const article = ref<Article | null>(null)
 const relatedArticles = ref<SidebarArticle[]>([])
@@ -24,6 +26,12 @@ const loadArticle = async () => {
     const id = route.params.id as string
     article.value = await articleApi.getDetail(id)
     relatedArticles.value = await articleApi.getRecommendList(4)
+    // 设置文章 SEO 信息
+    setSeo({
+      title: article.value.seoTitle || article.value.title,
+      description: article.value.seoDescription,
+      keywords: article.value.seoKeywords
+    })
   } catch (error) {
     console.error('Failed to load article:', error)
   } finally {

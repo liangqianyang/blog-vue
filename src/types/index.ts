@@ -35,6 +35,9 @@ export interface Article {
     id: number | string
     title: string
   }
+  seoTitle?: string
+  seoDescription?: string
+  seoKeywords?: string
 }
 
 // 轮播图

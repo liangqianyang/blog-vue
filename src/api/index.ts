@@ -141,7 +141,10 @@ export const articleApi = {
           name: label.title
         })),
         prev: data.prev || item.prev,
-        next: data.next || item.next
+        next: data.next || item.next,
+        seoTitle: item.seo_title,
+        seoDescription: item.seo_description,
+        seoKeywords: item.seo_keywords
       }
     }
     throw new Error('文章不存在')
