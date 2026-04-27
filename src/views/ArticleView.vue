@@ -327,6 +327,131 @@ watch(() => route.params.id, () => {
     max-width: 100%;
     margin: $spacing-sm auto;
   }
+
+  // 行内代码
+  :deep(code) {
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+    font-size: 0.88em;
+    color: #e53e3e;
+    background: #fff5f5;
+    border: 1px solid #fed7d7;
+    border-radius: $radius-sm;
+    padding: 1px 6px;
+    word-break: break-word;
+  }
+
+  // 块级代码（pre > code 或 pre.ql-syntax 等富文本编辑器输出）
+  :deep(pre) {
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+    font-size: 14px;
+    line-height: 1.7;
+    background: #1e2430;
+    color: #abb2bf;
+    border-radius: $radius-md;
+    padding: $spacing-lg $spacing-xl;
+    margin: $spacing-lg 0;
+    overflow-x: auto;
+    position: relative;
+    border-left: 4px solid $primary;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+
+    // pre 内的 code 重置行内样式
+    code {
+      font-size: inherit;
+      color: inherit;
+      background: none;
+      border: none;
+      padding: 0;
+      border-radius: 0;
+    }
+
+    // 滚动条美化
+    &::-webkit-scrollbar {
+      height: 6px;
+    }
+    &::-webkit-scrollbar-track {
+      background: #2d3446;
+      border-radius: 3px;
+    }
+    &::-webkit-scrollbar-thumb {
+      background: #4a5568;
+      border-radius: 3px;
+      &:hover {
+        background: #718096;
+      }
+    }
+  }
+
+  // Quill 编辑器输出的代码块
+  :deep(.ql-syntax) {
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+    font-size: 14px;
+    line-height: 1.7;
+    background: #1e2430;
+    color: #abb2bf;
+    border-radius: $radius-md;
+    padding: $spacing-lg $spacing-xl;
+    margin: $spacing-lg 0;
+    overflow-x: auto;
+    border-left: 4px solid $primary;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  // 标题样式
+  :deep(h1), :deep(h2), :deep(h3), :deep(h4), :deep(h5), :deep(h6) {
+    font-weight: bold;
+    color: #222;
+    margin: $spacing-xl 0 $spacing-md;
+    line-height: 1.4;
+  }
+  :deep(h2) { font-size: 22px; border-bottom: 1px solid $border-color; padding-bottom: $spacing-sm; }
+  :deep(h3) { font-size: 18px; }
+  :deep(h4) { font-size: 16px; }
+
+  // 引用块
+  :deep(blockquote) {
+    margin: $spacing-lg 0;
+    padding: $spacing-md $spacing-lg;
+    background: #f0f9fb;
+    border-left: 4px solid $primary;
+    color: $text-secondary;
+    border-radius: 0 $radius-sm $radius-sm 0;
+  }
+
+  // 列表
+  :deep(ul), :deep(ol) {
+    padding-left: $spacing-xl;
+    margin: $spacing-md 0;
+
+    li {
+      margin: $spacing-xs 0;
+      list-style: revert;
+    }
+  }
+
+  // 表格
+  :deep(table) {
+    width: 100%;
+    border-collapse: collapse;
+    margin: $spacing-lg 0;
+    font-size: $font-size-sm;
+
+    th, td {
+      border: 1px solid $border-color;
+      padding: $spacing-sm $spacing-md;
+      text-align: left;
+    }
+
+    th {
+      background: $light-bg;
+      font-weight: bold;
+      color: #333;
+    }
+
+    tr:nth-child(even) td {
+      background: #fafafa;
+    }
+  }
 }
 
 .share-box {
