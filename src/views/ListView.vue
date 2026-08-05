@@ -7,6 +7,7 @@ import type { Article, Label, NavItem } from '@/types'
 
 import BlogList from '@/components/home/BlogList.vue'
 import Pagination from '@/components/common/Pagination.vue'
+import AdSlot from '@/components/common/AdSlot.vue'
 
 const route = useRoute()
 const appStore = useAppStore()
@@ -215,9 +216,12 @@ watch(() => route.query.label_id, () => {
         <h1>{{ categoryName }}</h1>
         <p>{{ categoryDesc }}</p>
       </div>
-      
+
+      <!-- 广告位：分类页头部横幅（可按分类定向投放不同广告） -->
+      <AdSlot code="list_top_banner" />
+
       <!-- 文章列表 -->
-      <BlogList :articles="articles" :show-title="!route.query.keyword" />
+      <BlogList :articles="articles" :show-title="!route.query.keyword" :ad-interval="5" />
       
       <!-- 分页 -->
       <Pagination 
@@ -268,11 +272,9 @@ watch(() => route.query.label_id, () => {
         </ul>
       </div>
       
-      <!-- 广告 -->
-      <div class="white-bg ad img-scale">
-        <a href="/"><img src="/images/ad.png" alt="广告"></a>
-      </div>
-      
+      <!-- 广告位：侧栏推广 -->
+      <AdSlot code="sidebar_promo" />
+
       <!-- 标签云 -->
       <div class="white-bg tag-cloud" v-if="labels.length > 0">
         <h2 class="section-title">标签云</h2>
@@ -483,15 +485,6 @@ watch(() => route.query.label_id, () => {
       @include text-clamp(2);
       font-size: $font-size-sm;
     }
-  }
-}
-
-// 广告
-.ad {
-  border-radius: $radius-sm;
-  
-  img {
-    width: 100%;
   }
 }
 

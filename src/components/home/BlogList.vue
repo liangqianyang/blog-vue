@@ -2,17 +2,21 @@
 import { ref, onMounted, computed } from 'vue'
 import type { Article } from '@/types'
 import { articleApi } from '@/api'
+import AdSlot from '@/components/common/AdSlot.vue'
 
 console.log('BlogList setup')
 
 interface Props {
   showTitle?: boolean
   articles?: Article[]
+  /** 信息流广告插入位置（第几条之后），0 表示不插入 */
+  adInterval?: number
 }
 
 const props = withDefaults(defineProps<Props>(), {
   showTitle: true,
-  articles: undefined
+  articles: undefined,
+  adInterval: 0
 })
 
 const localArticles = ref<Article[]>([])
@@ -42,7 +46,8 @@ onMounted(async () => {
     <h2 v-if="showTitle" class="section-title">最新博文</h2>
     
     <ul>
-      <li v-for="article in displayArticles" :key="article.id" :class="{ 'has-images': article.images }">
+      <template v-for="(article, index) in displayArticles" :key="article.id">
+      <li :class="{ 'has-images': article.images }">
         <!-- 文章标题 -->
         <h3 class="blog-title">
           <router-link :to="`/article/${article.id}`" target="_blank">
@@ -87,14 +92,21 @@ onMounted(async () => {
         </p>
         
         <!-- 阅读更多按钮 -->
-        <router-link 
+        <router-link
           v-if="!article.images || article.images.length <= 1"
-          :to="`/article/${article.id}`" 
+          :to="`/article/${article.id}`"
           class="view-more"
         >
           阅读更多
         </router-link>
       </li>
+
+      <!-- 信息流广告（第 adInterval 条之后插入一次） -->
+      <AdSlot
+        v-if="adInterval > 0 && index + 1 === adInterval"
+        code="list_inline"
+      />
+      </template>
     </ul>
   </div>
 </template>

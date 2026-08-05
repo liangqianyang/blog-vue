@@ -4,6 +4,7 @@ import { useRoute } from 'vue-router'
 import { articleApi } from '@/api'
 import type { Article, SidebarArticle } from '@/types'
 import CommentSection from '@/components/common/CommentSection.vue'
+import AdSlot from '@/components/common/AdSlot.vue'
 import { useSeo } from '@/composables/useSeo'
 
 const route = useRoute()
@@ -98,15 +99,21 @@ watch(() => route.params.id, () => {
           <span class="views">{{ article.viewCount || 0 }}人已围观</span>
         </div>
         
+        <!-- 广告位：文章头部文字链 -->
+        <AdSlot code="article_top" />
+
         <!-- 文章摘要 -->
         <div class="article-summary" v-if="article.summary">
           <b>简介</b>
           <p>{{ article.summary }}</p>
         </div>
-        
+
         <!-- 文章内容 -->
         <div class="article-content" v-html="article.content"></div>
-        
+
+        <!-- 广告位：文章底部横幅 -->
+        <AdSlot code="article_bottom" />
+
         <!-- 分享 -->
         <div class="share-box">
           本文链接：<a :href="`/article/${article.id}`">{{ articleUrl }}</a>
@@ -154,11 +161,9 @@ watch(() => route.params.id, () => {
     
     <!-- 右侧边栏 -->
     <aside class="sidebar-wrapper">
-      <!-- 广告 -->
-      <div class="white-bg ad">
-        <img src="/images/ad.png" alt="广告">
-      </div>
-      
+      <!-- 广告位：文章页侧栏 -->
+      <AdSlot code="article_sidebar" />
+
       <!-- 猜你喜欢 -->
       <div class="white-bg text-list">
         <h2 class="section-title">猜你喜欢</h2>
@@ -168,6 +173,9 @@ watch(() => route.params.id, () => {
           </li>
         </ul>
       </div>
+
+      <!-- 广告位：文章页侧栏底部（猜你喜欢下方空白区，可堆叠多条） -->
+      <AdSlot code="article_sidebar_bottom" />
     </aside>
   </article>
 </template>
@@ -573,10 +581,6 @@ watch(() => route.params.id, () => {
 
 .section-title {
   @include section-title;
-}
-
-.ad img {
-  width: 100%;
 }
 
 .text-list {

@@ -1,14 +1,16 @@
-import type { 
-  Article, 
-  Banner, 
-  Category, 
-  PaginatedResponse, 
+import type {
+  Article,
+  Banner,
+  Category,
+  PaginatedResponse,
   SidebarArticle,
   Tag,
   BlogSite,
   AboutInfo,
   Message,
-  Comment
+  Comment,
+  Ad,
+  AdSlotData
 } from '@/types'
 
 // 默认作者
@@ -320,6 +322,25 @@ export const mockData = {
   // 获取轮播图
   getBanners(): Banner[] {
     return banners
+  },
+
+  // 按广告位获取广告
+  getAdsBySlot(code: string): AdSlotData {
+    const mockAd: Ad = {
+      id: 1,
+      title: '云产品精选特惠',
+      type: 'image',
+      image: '/images/ad.png',
+      clickUrl: '#'
+    }
+    return {
+      code,
+      displayMode: code.includes('side') || code.includes('sidebar') ? 'stack' : 'banner',
+      maxItems: 1,
+      width: null,
+      height: null,
+      ads: [mockAd]
+    }
   },
 
   // 获取分类

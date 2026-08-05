@@ -2,6 +2,7 @@
 import { ref, onMounted } from 'vue'
 import { articleApi, tagApi, announcementApi } from '@/api'
 import type { SidebarArticle, Label, Announcement } from '@/types'
+import AdSlot from '@/components/common/AdSlot.vue'
 
 const hotArticles = ref<SidebarArticle[]>([])
 const recommendArticles = ref<SidebarArticle[]>([])
@@ -99,6 +100,9 @@ onMounted(async () => {
       </ul>
     </div>
 
+    <!-- 广告位：侧栏推广（公告下方） -->
+    <AdSlot code="sidebar_promo" />
+
     <!-- 点击排行 -->
     <div class="white-bg ranking">
       <h2 class="section-title">点击排行</h2>
@@ -132,6 +136,9 @@ onMounted(async () => {
       </div>
     </div>
 
+    <!-- 广告位：侧栏中部（标签云与站长推荐之间） -->
+    <AdSlot code="sidebar_mid" />
+
     <!-- 站长推荐 -->
     <div class="white-bg recommend">
       <h2 class="section-title">站长推荐</h2>
@@ -153,13 +160,6 @@ onMounted(async () => {
       </ul>
     </div>
 
-    <!-- 广告位 -->
-    <div class="white-bg ad img-scale">
-      <a href="/">
-        <img src="/images/ad.png" alt="广告">
-      </a>
-    </div>
-
     <!-- 猜你喜欢 -->
     <div class="white-bg text-list">
       <h2 class="section-title">猜你喜欢</h2>
@@ -169,6 +169,9 @@ onMounted(async () => {
         </li>
       </ul>
     </div>
+
+    <!-- 广告位：侧栏底部（猜你喜欢下方，填充长页面侧栏空白） -->
+    <AdSlot code="sidebar_bottom" />
 
 
   </aside>
@@ -436,15 +439,6 @@ onMounted(async () => {
       @include text-clamp(2);
       font-size: $font-size-sm;
     }
-  }
-}
-
-// 广告
-.ad {
-  border-radius: $radius-sm;
-  
-  img {
-    width: 100%;
   }
 }
 

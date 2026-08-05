@@ -9,6 +9,7 @@ import Headline from '@/components/home/Headline.vue'
 import NewsTabs from '@/components/home/NewsTabs.vue'
 import TopicList from '@/components/home/TopicList.vue'
 import BlogList from '@/components/home/BlogList.vue'
+import AdSlot from '@/components/common/AdSlot.vue'
 
 const banners = ref<BannerType[]>([])
 const headlines = ref<Article[]>([])
@@ -53,17 +54,21 @@ onMounted(async () => {
       
       <!-- Tab 新闻 -->
       <NewsTabs />
-      
+
+      <!-- 广告位：首页轮播下方横幅 -->
+      <AdSlot code="home_banner_top" />
+
       <!-- 精彩专题 -->
       <TopicList />
-      
-      <!-- 广告位 -->
-      <div class="ad white-bg">
-        <img src="http://oss.lqy-comic.com/images/longad2.png-longad2860" alt="广告">
-      </div>
-      
-      <!-- 最新博文 -->
-      <BlogList />
+
+      <!-- 广告位：首页通栏横幅 -->
+      <AdSlot code="home_banner" />
+
+      <!-- 最新博文（第 5 篇后插入信息流广告） -->
+      <BlogList :ad-interval="5" />
+
+      <!-- 广告位：首页列表底部横幅 -->
+      <AdSlot code="home_banner_bottom" />
     </div>
     
     <!-- 右侧边栏 -->
@@ -131,16 +136,8 @@ onMounted(async () => {
 
 .headline-box {
   flex: 1;
-  
-  @include respond-to('md') {
-    width: 100%;
-  }
-}
 
-.ad {
-  @include card;
-  
-  img {
+  @include respond-to('md') {
     width: 100%;
   }
 }

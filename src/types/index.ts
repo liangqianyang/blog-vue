@@ -214,3 +214,33 @@ export interface Announcement {
   link?: string
   sort?: number
 }
+
+// ==================== 广告 ====================
+
+// 广告类型
+export type AdType = 'image' | 'text' | 'html'
+
+// 广告位展示模式
+export type AdDisplayMode = 'banner' | 'stack' | 'text' | 'inline' | 'html'
+
+// 单条广告
+export interface Ad {
+  id: number
+  title: string
+  type: AdType
+  image?: string | null
+  textContent?: string | null
+  htmlCode?: string | null
+  /** 点击跳转地址（后端302统计跳转） */
+  clickUrl?: string | null
+}
+
+// 广告位数据（含在投广告）
+export interface AdSlotData {
+  code: string
+  displayMode: AdDisplayMode
+  maxItems: number
+  width?: number | null
+  height?: number | null
+  ads: Ad[]
+}

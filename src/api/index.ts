@@ -1,9 +1,9 @@
 import axios from 'axios'
-import type { 
-  Article, 
-  Banner, 
-  Category, 
-  PaginatedResponse, 
+import type {
+  Article,
+  Banner,
+  Category,
+  PaginatedResponse,
   SidebarArticle,
   Tag,
   Label,
@@ -13,7 +13,9 @@ import type {
   NavItem,
   AboutMe,
   Message,
-  Comment
+  Comment,
+  AdType,
+  AdSlotData
 } from '@/types'
 import { mockData } from './mock'
 
@@ -258,6 +260,76 @@ export const bannerApi = {
       }))
     }
     return []
+  }
+}
+
+// 广告投放上下文（定向投放用）
+export interface AdContext {
+  /** 分类ID（列表页传入，明文） */
+  categoryId?: number
+  /** 文章加密ID（文章页传入，即路由里的那串） */
+  articleId?: string
+}
+
+// 广告 API
+export const adApi = {
+  // 按广告位标识获取在投广告，可带页面上下文实现定向投放
+  async getBySlot(code: string, ctx?: AdContext): Promise<AdSlotData | null> {
+    if (USE_MOCK) {
+      return mockData.getAdsBySlot(code)
+    }
+    try {
+      const { data } = await api.get(`/ads/public/slot/${code}`, {
+        params: {
+          category_id: ctx?.categoryId || undefined,
+          article_id: ctx?.articleId || undefined
+        }
+      })
+      if (data.code === 0 && data.data) {
+        const slot = data.data.slot
+        const ads = Array.isArray(data.data.ads) ? data.data.ads : []
+        return {
+          code: slot.code,
+          displayMode: slot.display_mode,
+          maxItems: slot.max_items,
+          width: slot.width,
+          height: slot.height,
+          ads: ads.map((item: {
+            id: number
+            title: string
+            type: AdType
+            image: string | null
+            text_content: string | null
+            html_code: string | null
+            click_url: string | null
+          }) => ({
+            id: item.id,
+            title: item.title,
+            type: item.type,
+            image: item.image,
+            textContent: item.text_content,
+            htmlCode: item.html_code,
+            clickUrl: item.click_url
+          }))
+        }
+      }
+      return null
+    } catch {
+      // 广告位不存在或接口异常时不展示广告，静默失败
+      return null
+    }
+  },
+
+  // 上报广告曝光（静默失败，不影响页面）
+  async reportView(id: number): Promise<void> {
+    if (USE_MOCK) {
+      return
+    }
+    try {
+      await api.post(`/ads/public/${id}/view`)
+    } catch {
+      // 忽略上报失败
+    }
   }
 }
 

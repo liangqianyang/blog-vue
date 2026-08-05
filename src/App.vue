@@ -4,6 +4,7 @@ import { useRoute } from 'vue-router'
 import AppHeader from '@/components/layout/AppHeader.vue'
 import AppFooter from '@/components/layout/AppFooter.vue'
 import BackToTop from '@/components/common/BackToTop.vue'
+import SideRails from '@/components/common/SideRails.vue'
 
 const route = useRoute()
 const hideLayout = computed(() => route.meta.hideLayout === true)
@@ -12,7 +13,7 @@ const hideLayout = computed(() => route.meta.hideLayout === true)
 <template>
   <div id="app">
     <AppHeader v-if="!hideLayout" />
-    
+
     <main class="main-wrapper">
       <router-view v-slot="{ Component }">
         <Transition name="page" mode="out-in">
@@ -20,8 +21,9 @@ const hideLayout = computed(() => route.meta.hideLayout === true)
         </Transition>
       </router-view>
     </main>
-    
+
     <AppFooter v-if="!hideLayout" />
+    <SideRails v-if="!hideLayout" />
     <BackToTop />
   </div>
 </template>

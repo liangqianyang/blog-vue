@@ -22,11 +22,6 @@ const routes: RouteRecordRaw[] = [
     component: () => import('@/views/AboutView.vue')
   },
   {
-    path: '/nav',
-    name: 'Nav',
-    component: () => import('@/views/NavView.vue')
-  },
-  {
     path: '/timeline',
     name: 'Timeline',
     component: () => import('@/views/TimelineView.vue')
