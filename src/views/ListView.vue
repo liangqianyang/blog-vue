@@ -290,6 +290,12 @@ watch(() => route.query.label_id, () => {
           </router-link>
         </div>
       </div>
+
+      <!-- 广告位：侧栏中部（标签云下方） -->
+      <AdSlot code="sidebar_mid" />
+
+      <!-- 广告位：侧栏底部（填充长列表页的侧栏空白） -->
+      <AdSlot code="sidebar_bottom" />
     </aside>
   </article>
 </template>

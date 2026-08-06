@@ -174,8 +174,14 @@ watch(() => route.params.id, () => {
         </ul>
       </div>
 
-      <!-- 广告位：文章页侧栏底部（猜你喜欢下方空白区，可堆叠多条） -->
+      <!-- 广告位：侧栏中部（猜你喜欢下方） -->
+      <AdSlot code="sidebar_mid" />
+
+      <!-- 广告位：文章页侧栏底部（可堆叠多条） -->
       <AdSlot code="article_sidebar_bottom" />
+
+      <!-- 广告位：侧栏底部（与首页/列表页共用，通投广告可在这里补位） -->
+      <AdSlot code="sidebar_bottom" />
     </aside>
   </article>
 </template>
