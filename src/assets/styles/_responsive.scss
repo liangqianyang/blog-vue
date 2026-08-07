@@ -181,8 +181,9 @@
 // 打印样式
 // ==========================================
 @media print {
-  header,
-  footer,
+  // 注意：必须使用 class 选择器，元素选择器会误伤简历页等业务页面中的 header/footer 元素
+  .header,
+  .footer,
   .sidebar-wrapper,
   .back-to-top,
   .search-box {

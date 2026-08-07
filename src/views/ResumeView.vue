@@ -1,13 +1,23 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, nextTick } from 'vue'
 
 const showContact = ref(false)
 
+// 导出 PDF：展开联系方式后调起浏览器打印（选择"另存为 PDF"即可）
+const exportPdf = async () => {
+  showContact.value = true
+  await nextTick()
+  document.body.classList.add('printing-resume')
+  const cleanup = () => document.body.classList.remove('printing-resume')
+  window.addEventListener('afterprint', cleanup, { once: true })
+  window.print()
+}
+
 const info = {
   name: '梁前扬',
-  title: '高级后端开发工程师（PHP / Golang）',
-  tags: ['9年开发经验', '📍 安徽·合肥', '本科', '全职'],
-  summary: '9年互联网全栈开发经验，精通PHP，熟练掌握Golang，了解Java。擅长高并发系统设计与性能优化，主导过大型ERP系统、SaaS商城、微服务架构落地等多类核心项目，具备从0到1的完整系统搭建与团队管理能力。深度实践MySQL调优、Redis缓存策略、Kafka消息队列、Elasticsearch搜索引擎等中间件技术；熟悉Docker/K8s容器化部署与CI/CD流程；拥有丰富的Go-Zero微服务架构经验及Vue前后端分离开发经验。具备优秀的技术攻关能力与跨团队协作经验，适应快速迭代的互联网研发节奏。',
+  title: '高级后端开发工程师 · AI 全栈实践（PHP / Golang）',
+  tags: ['9年开发经验', '📍 安徽·合肥', '本科', '全职', 'AI 驱动开发'],
+  summary: '9年互联网开发经验，精通PHP，熟练掌握Golang，了解Java，正全面转型AI全栈开发。擅长高并发系统设计与性能优化，主导过大型ERP系统、SaaS商城、微服务架构落地等多类核心项目，具备从0到1的完整系统搭建与团队管理能力。深度实践MySQL调优、Redis缓存策略、Kafka消息队列、Elasticsearch搜索引擎等中间件技术；熟悉Docker/K8s容器化部署与CI/CD流程；拥有丰富的Go-Zero微服务架构经验及Vue前后端分离开发经验。深度应用AI编程工具（Claude Code / Codex / Grok CLI）于需求分析、代码生成、代码评审、测试用例生成与遗留系统重构等开发全流程，具备LLM应用集成与Prompt工程实战经验，实现研发效率与交付质量的双重提升。具备优秀的技术攻关能力与跨团队协作经验，适应快速迭代的互联网研发节奏。',
   contact: {
     phone: '18155371631',
     email: '543492227@qq.com',
@@ -17,8 +27,10 @@ const info = {
 }
 
 const skills = [
+  { name: 'AI 辅助开发', level: 93, tag: '精通', desc: 'Claude Code / Codex / Grok CLI，深度应用于开发全流程' },
+  { name: 'AI 应用集成', level: 80, tag: '熟练', desc: 'LLM API 接入、Prompt 工程、MCP / Agent 应用实践' },
   { name: 'PHP', level: 92, tag: '精通', desc: 'ThinkPHP / Laravel / Yii，8年+深度使用' },
-  { name: 'Golang', level: 86, tag: '熟练', desc: 'Go-Zero微服务架构，3年+项目经验' },
+  { name: 'Golang', level: 75, tag: '熟练', desc: 'Go-Zero微服务架构，3年+项目经验' },
   { name: 'MySQL / Redis', level: 90, tag: '熟练', desc: '慢查询优化、索引设计、缓存策略' },
   { name: 'Go-Zero 微服务', level: 83, tag: '熟练', desc: '服务拆分、RPC通信、服务治理' },
   { name: 'Kafka / MQ', level: 80, tag: '熟练', desc: '异步解耦、削峰填谷、消息可靠投递' },
@@ -37,8 +49,9 @@ const experiences = [
     highlights: [
       '主持月度需求评审与技术方案设计，合理分配开发任务，确保版本按时高质量上线',
       '主导日志系统建设，实现异常实时监控与告警，系统故障响应效率大幅提升',
-      '主导搭建内部数据中心，整合多业务线数据资源，统一数据标准与存储规范，为后续数据驱动决策奠定基础',
+      '主导重构打卡机应用对接，第三方服务如cor识别，人脸识别的数据流转与异常处理，提升系统稳定性与用户体验',
       '设计并开发开放平台，将平台核心数据能力以标准API形式开放给第三方机构，支撑课程收费等商业化场景的数据对接，推动业务生态持续扩展',
+      '在团队内落地AI辅助开发工作流（Claude Code / Codex / Grok CLI），覆盖代码生成、代码评审、单测编写与遗留代码治理等场景，团队交付效率与代码质量双提升',
       '系统化梳理并解决历史遗留Bug，显著提升系统稳定性与用户体验'
     ]
   },
@@ -119,6 +132,21 @@ const experiences = [
 
 const coreProjects = [
   {
+    name: '在线100分教育平台',
+    period: '2025.05 - 至今',
+    company: '合肥元算点',
+    tag: '团队管理',
+    role: '技术组长',
+    tech: 'PHP · MySQL · Redis · Claude Code · Codex',
+    highlights: [
+      '在线教育SaaS平台，担任技术组长统筹团队开发管理',
+      '主导日志系统与数据中心建设，搭建开放平台支撑第三方数据对接',
+      '推动AI编程工具（Claude Code / Codex / Grok CLI）在团队落地，将AI辅助开发融入需求迭代全流程，缩短交付周期',
+      '实现异常实时监控与告警，系统故障响应效率大幅提升',
+      '系统化治理技术债务，平台稳定性显著提升'
+    ]
+  },
+  {
     name: '芯晶采 SaaS 商城系统',
     period: '2024.08 - 2025.05',
     company: '云汉芯城',
@@ -144,20 +172,6 @@ const coreProjects = [
       '完成Golang核心重构，慢查询减少30%，QPS提升35%',
       '推动微服务架构（Go-Zero）落地，负责系统异常巡检与需求迭代',
       '逐步梳理Legacy代码，制定重构计划并稳步推进'
-    ]
-  },
-  {
-    name: '在线100分教育平台',
-    period: '2025.05 - 至今',
-    company: '合肥元算点',
-    tag: '团队管理',
-    role: '技术组长',
-    tech: 'PHP · MySQL · Redis',
-    highlights: [
-      '在线教育SaaS平台，担任技术组长统筹团队开发管理',
-      '主导日志系统与数据中心建设，搭建开放平台支撑第三方数据对接',
-      '实现异常实时监控与告警，系统故障响应效率大幅提升',
-      '系统化治理技术债务，平台稳定性显著提升'
     ]
   },
   {
@@ -262,10 +276,13 @@ const education = {
           </div>
         </div>
         <div class="header-right">
-          <button class="contact-btn" @click="showContact = !showContact">
-            <span v-if="!showContact">📬 查看联系方式</span>
-            <span v-else>🔒 收起</span>
-          </button>
+          <div class="header-actions">
+            <button class="contact-btn" @click="showContact = !showContact">
+              <span v-if="!showContact">📬 查看联系方式</span>
+              <span v-else>🔒 收起</span>
+            </button>
+            <button class="contact-btn export-btn" @click="exportPdf">📄 导出 PDF</button>
+          </div>
           <Transition name="fade">
             <div class="contact-info" v-if="showContact">
               <p>📱 <strong>手机：</strong>{{ info.contact.phone }}</p>
@@ -460,6 +477,21 @@ const education = {
 
   &:hover {
     background: rgba(255, 255, 255, 0.2);
+  }
+}
+
+.header-actions {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.export-btn {
+  background: rgba($primary, 0.35);
+  border-color: rgba($primary, 0.5);
+
+  &:hover {
+    background: rgba($primary, 0.55);
   }
 }
 
@@ -943,6 +975,69 @@ const education = {
 
   .core-project-card .proj-header {
     flex-direction: column;
+  }
+}
+</style>
+
+<!-- 全局打印样式：仅导出简历 PDF 时生效 -->
+<style lang="scss">
+@use '@/assets/styles/variables' as *;
+
+@page {
+  margin: 12mm;
+}
+
+@media print {
+  body.printing-resume {
+    background: #fff;
+
+    // 隐藏站点布局元素
+    .header,
+    .footer,
+    .side-rail,
+    .back-to-top {
+      display: none !important;
+    }
+
+    // 隐藏操作按钮，联系方式保持展开状态
+    .contact-btn {
+      display: none;
+    }
+
+    .resume-page {
+      max-width: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .resume-container {
+      box-shadow: none;
+      border-radius: 0;
+    }
+
+    // 保留深色头部与彩色标签背景
+    // 注意：print-color-adjust 不继承，必须逐元素设置
+    .resume-container,
+    .resume-container * {
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    // 分页控制：卡片不跨页截断，章节标题不孤立在页尾
+    .resume-section {
+      padding: 20px 28px;
+    }
+
+    .section-title {
+      break-after: avoid;
+    }
+
+    .timeline-content,
+    .core-project-card,
+    .other-project-item,
+    .education-item {
+      break-inside: avoid;
+    }
   }
 }
 </style>
