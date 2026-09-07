@@ -244,3 +244,22 @@ export interface AdSlotData {
   height?: number | null
   ads: Ad[]
 }
+
+// ==================== AI 问答 ====================
+
+// 回答引用来源
+export interface ChatSource {
+  title: string
+  url: string
+  heading?: string
+  score?: number
+}
+
+// 问答消息
+export interface ChatMessage {
+  id: string
+  role: 'user' | 'assistant'
+  content: string
+  sources?: ChatSource[]
+  error?: boolean
+}

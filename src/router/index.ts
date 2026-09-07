@@ -27,6 +27,12 @@ const routes: RouteRecordRaw[] = [
     component: () => import('@/views/TimelineView.vue')
   },
   {
+    path: '/chat',
+    name: 'Chat',
+    component: () => import('@/views/ChatView.vue'),
+    meta: { hideInNav: true }
+  },
+  {
     path: '/resume',
     name: 'Resume',
     component: () => import('@/views/ResumeView.vue'),

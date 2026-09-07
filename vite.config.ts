@@ -48,6 +48,12 @@ export default defineConfig({
       '/api': {
         target: 'http://www.blog.test',
         changeOrigin: true
+      },
+      // AI 问答服务（blog-agent，本地 FastAPI）
+      '/agent-api': {
+        target: 'http://127.0.0.1:8000',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/agent-api/, '')
       }
     }
   }

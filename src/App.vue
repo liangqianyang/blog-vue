@@ -5,6 +5,7 @@ import AppHeader from '@/components/layout/AppHeader.vue'
 import AppFooter from '@/components/layout/AppFooter.vue'
 import BackToTop from '@/components/common/BackToTop.vue'
 import SideRails from '@/components/common/SideRails.vue'
+import ChatWidget from '@/components/chat/ChatWidget.vue'
 
 const route = useRoute()
 const hideLayout = computed(() => route.meta.hideLayout === true)
@@ -25,6 +26,7 @@ const hideLayout = computed(() => route.meta.hideLayout === true)
     <AppFooter v-if="!hideLayout" />
     <SideRails v-if="!hideLayout" />
     <BackToTop />
+    <ChatWidget />
   </div>
 </template>
 
