@@ -40,7 +40,7 @@ const submit = () => {
       ref="textareaEl"
       v-model="text"
       rows="1"
-      placeholder="问问博客里的内容，Enter 发送，Shift+Enter 换行"
+      placeholder="问问博客里的内容，Enter 发送"
       maxlength="4000"
       @input="adjustHeight"
       @keydown.enter="onEnter"
