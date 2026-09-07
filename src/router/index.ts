@@ -33,6 +33,12 @@ const routes: RouteRecordRaw[] = [
     meta: { hideInNav: true }
   },
   {
+    path: '/ai-search',
+    name: 'AgentSearch',
+    component: () => import('@/views/AgentSearchView.vue'),
+    meta: { hideInNav: true }
+  },
+  {
     path: '/resume',
     name: 'Resume',
     component: () => import('@/views/ResumeView.vue'),

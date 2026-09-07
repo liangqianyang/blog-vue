@@ -263,3 +263,15 @@ export interface ChatMessage {
   sources?: ChatSource[]
   error?: boolean
 }
+
+// AI 语义检索结果
+export interface AgentSearchResult {
+  title: string
+  url: string
+  heading: string
+  score: number
+  text: string
+  category?: string | null
+  labels?: string[]
+  publishedAt?: string | null
+}

@@ -1,4 +1,4 @@
-import type { ChatMessage, ChatSource } from '@/types'
+import type { AgentSearchResult, ChatMessage, ChatSource } from '@/types'
 
 // AI 问答走独立的 Python 服务（fetch 流式），不复用 axios 实例与 Laravel 包络约定
 const BASE_URL: string = import.meta.env.VITE_CHAT_API_BASE_URL || '/agent-api'
@@ -114,4 +114,22 @@ export async function fetchHistory(threadId: string): Promise<ChatMessage[]> {
   if (!resp.ok) throw new Error(`HTTP ${resp.status}`)
   const data = await resp.json()
   return (data.messages || []) as ChatMessage[]
+}
+
+export async function agentSearch(query: string, topK = 8): Promise<AgentSearchResult[]> {
+  const resp = await fetch(`${BASE_URL}/api/search?q=${encodeURIComponent(query)}&top_k=${topK}`)
+  if (!resp.ok) throw new Error(`HTTP ${resp.status}`)
+  const data = await resp.json()
+  return (data.results || []).map(
+    (r: Record<string, unknown>): AgentSearchResult => ({
+      title: String(r.title || ''),
+      url: String(r.url || ''),
+      heading: String(r.heading || ''),
+      score: Number(r.score || 0),
+      text: String(r.text || ''),
+      category: (r.category as string) || null,
+      labels: (r.labels as string[]) || [],
+      publishedAt: (r.published_at as string) || null
+    })
+  )
 }
