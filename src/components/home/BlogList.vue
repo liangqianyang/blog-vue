@@ -85,7 +85,7 @@ onMounted(async () => {
         <!-- 文章信息 -->
         <p class="blog-info">
           <i class="avatar">
-            <img src="http://oss.lqy-comic.com/attachments/20260126_IhNbsOYBzBbZJxj7.jpg" alt="头像">
+            <img src="https://oss.lqy-comic.com/attachments/20260126_IhNbsOYBzBbZJxj7.jpg" alt="头像">
           </i>
           <span>{{ article.createTime }}</span>
           <span>【<router-link :to="`/list/${article.category.slug}`">{{ article.category.name }}</router-link>】</span>

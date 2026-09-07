@@ -91,7 +91,7 @@ watch(() => route.params.id, () => {
         <!-- 文章信息 -->
         <div class="article-info">
           <i class="avatar">
-            <img src="http://oss.lqy-comic.com/attachments/20260126_IhNbsOYBzBbZJxj7.jpg" alt="头像">
+            <img src="https://oss.lqy-comic.com/attachments/20260126_IhNbsOYBzBbZJxj7.jpg" alt="头像">
           </i>
           <span class="author">枫叶</span>
           <span class="date">{{ article.createTime }}</span>
