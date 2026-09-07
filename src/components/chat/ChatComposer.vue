@@ -43,7 +43,7 @@ const submit = () => {
       placeholder="问问博客里的内容，Enter 发送，Shift+Enter 换行"
       maxlength="4000"
       @input="adjustHeight"
-      @keydown="onEnter"
+      @keydown.enter="onEnter"
     ></textarea>
     <button v-if="store.isStreaming" class="btn stop" title="停止生成" @click="store.stop()">
       <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
